@@ -1,0 +1,30 @@
+{
+  "name": "dynamodb-fast-access",
+  "version": "0.1.0",
+  "description": "Default CRUD operations for accessing AWS DynamoDB collection items in an easy-to-extend structure.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrian-mezei/dynamodb-fast-access.git"
+  },
+  "keywords": [
+    "dynamodb",
+    "CRUD",
+    "fast",
+    "access"
+  ],
+  "author": "Adrián Mezei",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adrian-mezei/dynamodb-fast-access/issues"
+  },
+  "homepage": "https://github.com/adrian-mezei/dynamodb-fast-access#readme",
+  "dependencies": {
+    "aws-sdk": "^2.528.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.7.5"
+  }
+}

@@ -1,0 +1,11 @@
+{
+    "apiVersion": "2012-08-10",
+    "maxRetries": 9,
+    "tables": [
+        {
+            "name": "ExampleTableName",
+            "partitionKeyName": "id",
+            "partitionKeyType": "string"
+        }
+    ]
+}

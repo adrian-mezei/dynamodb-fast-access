@@ -1,0 +1,5 @@
+# Source directories
+src/
+
+# Dependency directories
+node_modules/
