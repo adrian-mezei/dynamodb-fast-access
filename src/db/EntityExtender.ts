@@ -1,3 +1,1 @@
-interface EntityExtender<RawEntityType, EntityType> {
-    extend(rawEntities: RawEntityType[]): Promise<EntityType[]>;
-}
+type EntityExtender<EntityModel, EntityRawModel> = (rawEntities: EntityRawModel[]) => Promise<EntityModel[]>;

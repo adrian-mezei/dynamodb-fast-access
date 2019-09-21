@@ -5,7 +5,16 @@
         {
             "name": "ExampleTableName",
             "partitionKeyName": "id",
-            "partitionKeyType": "string"
+            "partitionKeyType": "string",
+            "sortKeySeparator": "$"
+        },
+        {
+            "name": "CompositeExampleTableName",
+            "partitionKeyName": "id",
+            "partitionKeyType": "string",
+            "sortKeyName": "timestamp",
+            "sortKeyType": "number",
+            "sortKeySeparator": "$"
         }
     ]
 }

@@ -1,4 +1,4 @@
 export interface ListModel<T> {
-    item: T[];
-    lastEvaluatedKEy?: string;
+    items: T[];
+    lastEvaluatedKey?: string;
 }

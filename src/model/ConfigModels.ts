@@ -10,6 +10,7 @@ interface DynamoDBTable {
     partitionKeyType: string;
     sortKeyName?: string;
     sortKeyType?: string;
+    sortKeySeparator?: string;
     indices?: DynamoDBIndex[];
 }
 
@@ -18,4 +19,4 @@ interface DynamoDBIndex {
     dynamoDBIndexName: string;
     partitionKeyName: string;
     sortKeyName?: string;
-};
+}

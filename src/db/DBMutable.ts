@@ -1,26 +1,29 @@
 import { DynamoDB } from 'aws-sdk';
 import { ExpressionCreator } from './ExpressionCreator';
-import { DBGeneral } from './DBGeneral';
-import { DatabaseConfig } from './../util/DatabaseConfig';
+import { DB } from './DB';
+import { DatabaseConfig } from '../util/DatabaseConfig';
+import { IDBMutable } from '../model/db/IDBMutable';
+import { StaticImplements } from '../util/StaticImplements';
 
-export function DBMutableGeneral<EntityModel, EntityRawModel, EntityUpdateModel>(
+export function DBMutable<EntityModel, EntityRawModel, EntityUpdateModel>(
     tableName: string, 
-    extend: (rawEntity: EntityRawModel[]) => Promise<EntityModel[]>,
-    deleteStronglyRelateds: (rawEntities: EntityRawModel[]) => Promise<{}>) {
-    
-    return class DBMutableGeneral extends DBGeneral<EntityModel, EntityRawModel>(tableName, extend, deleteStronglyRelateds) {
-
-        public static updateEntityByID(entityID: string, updateAttributes: EntityUpdateModel): Promise<EntityUpdateModel> {
-            return DBMutableGeneral.updateEntityByIDWithDelete(entityID, updateAttributes, []);
+    extend: EntityExtender<EntityModel, EntityRawModel>, 
+    deleteRelated: EntityRelatedDeleter) {
+       
+    @StaticImplements<IDBMutable<EntityModel, EntityRawModel, EntityUpdateModel>>()
+    class DBMutable extends DB<EntityModel, EntityRawModel>(tableName, extend, deleteRelated) {
+        public static updateById(id: string, updateAttributes: EntityUpdateModel): Promise<EntityUpdateModel> {
+            return DBMutable.updateByIdWithDelete(id, updateAttributes, []);
         }
 
-        public static async updateEntityByIDWithDelete(entityID: string, updateAttributes: EntityUpdateModel, deleteAttributes: string[]): Promise<EntityUpdateModel> {
+        public static async updateByIdWithDelete(id: string, updateAttributes: EntityUpdateModel, deleteAttributes: string[]): Promise<EntityUpdateModel> {
             if((!updateAttributes || Object.keys(updateAttributes).length === 0) && (!deleteAttributes || deleteAttributes.length === 0)) return {} as EntityUpdateModel;
             
-            const tableName: string =  DatabaseConfig.DynamoDBConfig.tables.find(x => x.name === tableName)!.name;
-            const partitionKeyName: string = DatabaseConfig.DynamoDBConfig.tables.find(x => x.name === tableName)!.partitionKeyName;
-            const sortKeyName: string | undefined = DatabaseConfig.DynamoDBConfig.tables.find(x => x.name === tableName)!.sortKeyName;
-
+            const tableName = DBMutable.getTableName();
+            const partitionKeyName = DBMutable.getPartitionKeyName();
+            const sortKeyName = DBMutable.getSortKeyName();
+            const sortKeySeparator = DBMutable.getSortKeySeparator();
+            
             const deleteAttributesObject: any = {};
             for(const deleteAttribute of deleteAttributes) {
                 deleteAttributesObject[deleteAttribute] = '';
@@ -28,7 +31,7 @@ export function DBMutableGeneral<EntityModel, EntityRawModel, EntityUpdateModel>
 
             const updateParams: DynamoDB.DocumentClient.UpdateItemInput = {
                 TableName: tableName,
-                Key: { [partitionKeyName]: entityID },
+                Key: { [partitionKeyName]: id },
                 UpdateExpression: '',
                 ExpressionAttributeNames: ExpressionCreator.getExpressionAttributeNames(Object.assign({}, updateAttributes, deleteAttributesObject)),
                 ExpressionAttributeValues: ExpressionCreator.getExpressionAttributeValues(Object.assign({}, updateAttributes)),
@@ -36,9 +39,9 @@ export function DBMutableGeneral<EntityModel, EntityRawModel, EntityUpdateModel>
             };
 
             if(sortKeyName !== undefined) {
-                if(entityID.indexOf(DBMutableGeneral.sortKeySeparator) < 0) throw new Error('Composite key must include ' + DBMutableGeneral.sortKeySeparator + ' that separates the keys.');
-                updateParams.Key[partitionKeyName] = entityID.split(DBMutableGeneral.sortKeySeparator)[0];
-                updateParams.Key[sortKeyName] = entityID.split(DBMutableGeneral.sortKeySeparator).splice(1).join(DBMutableGeneral.sortKeySeparator);
+                if(id.indexOf(sortKeySeparator) < 0) throw new Error('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
+                updateParams.Key[partitionKeyName] = id.split(sortKeySeparator)[0];
+                updateParams.Key[sortKeyName] = id.split(sortKeySeparator).splice(1).join(sortKeySeparator);
             }
 
             if(updateAttributes && Object.keys(updateAttributes).length >= 0) {
@@ -56,5 +59,7 @@ export function DBMutableGeneral<EntityModel, EntityRawModel, EntityUpdateModel>
 
         }
 
-    };
+    }
+
+    return DBMutable;
 }
