@@ -1,9 +1,18 @@
 {
   "name": "dynamodb-fast-access",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Default CRUD operations for accessing AWS DynamoDB collection items in an easy-to-extend structure.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -r ts-node/register src/test/**/*.test.ts",
+    "build": "tsc",
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
@@ -17,14 +26,23 @@
   ],
   "author": "Adrián Mezei",
   "license": "MIT",
+  "files": [
+    "dist/**/*"
+  ],
   "bugs": {
     "url": "https://github.com/adrian-mezei/dynamodb-fast-access/issues"
   },
   "homepage": "https://github.com/adrian-mezei/dynamodb-fast-access#readme",
   "dependencies": {
-    "aws-sdk": "^2.528.0"
+    "aws-sdk": "^2.539.0"
   },
   "devDependencies": {
-    "@types/node": "^12.7.5"
+    "@types/chai": "^4.2.3",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.7.5",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.1",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
   }
 }

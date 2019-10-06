@@ -1,23 +1,25 @@
-import { DynamoDB } from 'aws-sdk';
-
 export interface IDB<EntityModel, EntityRawModel> {
-    getSortKeySeparator(): string | undefined;
-
+    // Config
     getTableName(): string;
     getPartitionKeyName(): string;
     getSortKeyName(): string | undefined;
+    getSortKeySeparator(): string;
 
-    getByIdRaw(id: string, attributes?: { ConsistentRead?: boolean }): Promise<EntityRawModel>;
-    getById(id: string, attributes?: { ConsistentRead?: boolean} | undefined): Promise<EntityModel>;
-    getByIdsRaw(ids: string[]): Promise<EntityRawModel[]>;
-    getByIds(ids: string[]): Promise<EntityModel[]>;
-    getFilteredRaw(filterAttributes: Partial<EntityRawModel> | undefined, arrayContainsAttribute: { arrayName: string, value: string } | undefined): Promise<EntityRawModel[]>;
-    getFiltered(filterAttributes: undefined | object, arrayContainsAttribute: { arrayName: string, value: string } | undefined): Promise<EntityModel[]>;
-    scan(params: DynamoDB.DocumentClient.ScanInput, items: EntityRawModel[]): Promise<EntityModel[]>;
-    deleteById(id: string): Promise<string>;
-    deleteByIds(ids: string[] | undefined): Promise<string[]>;
-    deleteScanFiltered(filterAttributes: Partial<EntityRawModel> | undefined, arrayContains?: { arrayName: string, value: string } | undefined ): Promise<{}>;
+    // Create
     createRaw(entity: EntityRawModel): Promise<EntityRawModel>;
     create(entity: EntityRawModel): Promise<EntityModel>;
-    createBatch(entities: EntityRawModel[]): Promise<EntityRawModel[]>;
+    createBatchRaw(entities: EntityRawModel[]): Promise<EntityRawModel[]>;
+    createBatch(entities: EntityRawModel[]): Promise<EntityModel[]>;
+    // Get
+    getByIdRaw(id: string, attributes?: { ConsistentRead?: boolean }): Promise<EntityRawModel>;
+    getById(id: string, attributes?: { ConsistentRead?: boolean}): Promise<EntityModel>;
+    getByIdsRaw(ids: string[]): Promise<EntityRawModel[]>;
+    getByIds(ids: string[]): Promise<EntityModel[]>;
+    // Scan
+    scanFilteredRaw(filterAttributes?: Partial<EntityRawModel>, arrayContainsAttribute?: { arrayName: string, value: string }): Promise<EntityRawModel[]>;
+    scanFiltered(filterAttributes?: | object, arrayContainsAttribute?: { arrayName: string, value: string }): Promise<EntityModel[]>;
+    // Delete
+    deleteById(id: string): Promise<string>;
+    deleteByIds(ids?: string[]): Promise<string[]>;
+    deleteScanFiltered(filterAttributes?: Partial<EntityRawModel>, arrayContains?: { arrayName: string, value: string } ): Promise<{}>;
 }

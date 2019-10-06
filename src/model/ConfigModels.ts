@@ -1,5 +1,5 @@
 export interface DynamoDBConfigModel {
-    apiVersion: string;
+    apiVersion?: string;
     maxRetries: number;
     tables: DynamoDBTable[];
 }
@@ -7,7 +7,7 @@ export interface DynamoDBConfigModel {
 interface DynamoDBTable {
     name: string;
     partitionKeyName: string;
-    partitionKeyType: string;
+    partitionKeyType: 'string' | 'binary' | 'number';
     sortKeyName?: string;
     sortKeyType?: string;
     sortKeySeparator?: string;
@@ -16,7 +16,9 @@ interface DynamoDBTable {
 
 interface DynamoDBIndex {
     name: string;
-    dynamoDBIndexName: string;
     partitionKeyName: string;
+    partitionKeyType: 'string' | 'binary' | 'number';
     sortKeyName?: string;
+    sortKeyType?: string;
+    sortKeySeparator?: string;
 }
