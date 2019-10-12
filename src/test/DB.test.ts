@@ -32,7 +32,7 @@ class ProductsDB extends DB<ProductModel, ProductRawModel>('ProductsTimestamp') 
 //    ##    ######    ######     ##     ######  
 //    ##    ##             ##    ##          ## 
 //    ##    ##       ##    ##    ##    ##    ## 
-//    ##    ########  ######     ##     ######     
+//    ##    ########  ######     ##     ######  
 
 describe('Create function', () => { 
     const item = { 
