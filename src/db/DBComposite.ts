@@ -80,7 +80,6 @@ export function DBComposite<EntityModel, EntityRawModel>(
                 const tableName = DBComposite.getTableName();
                 const partitionKeyName = DBComposite.getPartitionKeyName();
                 const sortKeyName = DBComposite.getSortKeyName();
-                const sortKeySeparator = DBComposite.getSortKeySeparator();
                 
                 if(sortKeyName === undefined) throw new Error('Sort key name is undefined for table ' + tableName + '.');
 
@@ -103,8 +102,8 @@ export function DBComposite<EntityModel, EntityRawModel>(
 
                 if(exclusiveStartKey !== undefined) {
                     queryParams.ExclusiveStartKey = {
-                        [partitionKeyName]: exclusiveStartKey.split(sortKeySeparator)[0],
-                        [sortKeyName]: exclusiveStartKey.split(sortKeySeparator).splice(1).join(sortKeySeparator)
+                        [partitionKeyName]: DBComposite.castKey(exclusiveStartKey).partitionKey,
+                        [sortKeyName]: DBComposite.castKey(exclusiveStartKey).sortKey
                     };
                 }
 
@@ -119,7 +118,6 @@ export function DBComposite<EntityModel, EntityRawModel>(
                 const tableName = DBComposite.getTableName();
                 const partitionKeyName = DBComposite.getPartitionKeyName();
                 const sortKeyName = DBComposite.getSortKeyName();
-                const sortKeySeparator = DBComposite.getSortKeySeparator();
                 if(sortKeyName === undefined) throw new Error('Sort key name is undefined for table ' + tableName + '.');
 
                 const queryParams: DynamoDB.DocumentClient.QueryInput = {
@@ -135,8 +133,8 @@ export function DBComposite<EntityModel, EntityRawModel>(
 
                 if(exclusiveStartKey !== undefined) {
                     queryParams.ExclusiveStartKey = {
-                        [partitionKeyName]: exclusiveStartKey.split(sortKeySeparator)[0],
-                        [sortKeyName]: exclusiveStartKey.split(sortKeySeparator).splice(1).join(sortKeySeparator)
+                        [partitionKeyName]: DBComposite.castKey(exclusiveStartKey).partitionKey,
+                        [sortKeyName]: DBComposite.castKey(exclusiveStartKey).sortKey
                     };
                 }
 

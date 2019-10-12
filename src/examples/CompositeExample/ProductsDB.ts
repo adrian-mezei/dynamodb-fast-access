@@ -1,16 +1,17 @@
 import { DBCompositeMutable } from '../../db/DBCompositeMutable';
 import { DatabaseConfig } from '../../util/DatabaseConfig';
+import { KeyTypeEnum } from '../../model/ConfigModels';
 
 // Initiate by passing the config (you can also load this from a config file)
 DatabaseConfig.init({
     apiVersion: '2012-08-10',
     maxRetries: 9,
     tables: [{
-        name: 'CompositeExampleTableName',
+        name: 'Products',
         partitionKeyName: 'id',
-        partitionKeyType: 'string',
+        partitionKeyType: KeyTypeEnum.string,
         sortKeyName: 'timestamp',
-        sortKeyType: 'number',
+        sortKeyType: KeyTypeEnum.number,
         sortKeySeparator: '$'
     }]
 });
@@ -33,7 +34,7 @@ interface ProductModel extends ProductRawModel {
 }
 
 // Create a model of those attributes that can be updated
-type ProductUpdateModel = Omit<Omit<ProductRawModel, 'id'>, 'timestamp'>; // For example everything but the id and the timestamp
+type ProductUpdateModel = Partial<Omit<Omit<ProductRawModel, 'id'>, 'timestamp'>>; // For example anything but the id and the timestamp
 
 // Create the extender function that calculates the derived attribute values
 async function extender(rawItems: ProductRawModel[]): Promise<ProductModel[]> {

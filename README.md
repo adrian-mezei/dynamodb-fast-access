@@ -1,5 +1,5 @@
 # dynamodb-fast-access
-Default CRUD operations for accessing AWS DynamoDB collection items in an easy-to-extend structure.
+Default CRUD operations for managing AWS DynamoDB table items in an easy-to-extend structure.
 
 ## Quick example
 ```javascript
@@ -11,9 +11,10 @@ DDFA.DatabaseConfig.init({
     tables: [{
         name: 'Products',
         partitionKeyName: 'id',
-        partitionKeyType: 'string'
+        partitionKeyType: KeyTypeEnum.string,
     }]
 });
+
 class ProductsDB extends DDFA.DBMutable<any, any, any>('Products') {
     // You inherit a lot of basic functions
     // You can write further DB queries here
@@ -49,16 +50,16 @@ ProductsDB.deleteById('123456abc');
 | tables | true | array | The array of DynamoDB table configurations. |
 | tables[].name | true | string | The name of the DynamoDB table. |
 | tables[].partitionKeyName | true | string | The name of the partition key of the DynamoDB table. |
-| tables[].partitionKeyType | true | enum | The type of the partition key of the DynamoDB table. Possible values: 'string', 'binary', 'number'. |
+| tables[].partitionKeyType | true | enum | The type of the partition key of the DynamoDB table. Possible values: 'string', 'number'. |
 | tables[].sortKeyName | false | string | The name of the sort key of the DynamoDB table. |
-| tables[].sortKeyType | false | enum | The type of the sort key of the DynamoDB table. Possible values: 'string', 'binary', 'number'. |
+| tables[].sortKeyType | false | enum | The type of the sort key of the DynamoDB table. Possible values: 'string', 'number'. |
 | tables[].sortKeySeparator | false | string | In case of composite key, the item id (required by some functions) is the partition key concatenated with the sort key with this separator. |
 | tables[].indices | false | array | The array of DynamoDB table index configurations. |
 | tables[].indices[].name | true | string | The name of the DynamoDB table index. |
 | tables[].indices[].partitionKeyName | true | string | The name of the partition key of the DynamoDB table index. |
-| tables[].indices[].partitionKeyType | true | string | The type of the partition key of the DynamoDB table index. Possible values: 'string', 'binary', 'number'. |
+| tables[].indices[].partitionKeyType | true | string | The type of the partition key of the DynamoDB table index. Possible values: 'string', 'number'. |
 | tables[].indices[].sortKeyName | false | string | The name of the sort key of the DynamoDB table index. |
-| tables[].indices[].sortKeyType | false | string | The type of the sort key of the DynamoDB table index. Possible values: 'string', 'binary', 'number'. |
+| tables[].indices[].sortKeyType | false | string | The type of the sort key of the DynamoDB table index. Possible values: 'string', 'number'. |
 | tables[].indices[].sortKeySeparator | false | string | In case of composite key, the item id (required by some functions) is the partition key concatenated with the sort key with this separator. |
 
 Example:

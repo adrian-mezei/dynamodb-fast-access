@@ -1,5 +1,6 @@
 import { DatabaseConfig } from '../../util/DatabaseConfig';
 import { DBMutable } from '../../db/DBMutable';
+import { KeyTypeEnum } from '../../model/ConfigModels';
 
 // Initiate by passing the config (you can also load this from a config file)
 DatabaseConfig.init({
@@ -8,7 +9,7 @@ DatabaseConfig.init({
     tables: [{
         name: 'Products',
         partitionKeyName: 'id',
-        partitionKeyType: 'string'
+        partitionKeyType: KeyTypeEnum.string,
     }]
 });
 

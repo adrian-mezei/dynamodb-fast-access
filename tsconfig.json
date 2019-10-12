@@ -29,7 +29,7 @@
     "exclude": [
         "node_modules",
         "dist",
-        "example"
+        "src/test"
     ],
     "typeRoots": [
         "node_modules/@types"

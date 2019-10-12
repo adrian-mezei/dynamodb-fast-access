@@ -3,6 +3,7 @@ import { ExpressionCreator } from './ExpressionCreator';
 import { DatabaseConfig } from '../util/DatabaseConfig';
 import { EntityExtender, DefaultEntityExtender } from './EntityExtender';
 import { EntityRelatedDeleter, DefaultEntityRelatedDeleter } from './EntityRelatedDeleter';
+import { DynamoDBKey, KeyTypeEnum } from '../model/ConfigModels';
 
 export function DB<EntityModel, EntityRawModel>(
     tableName: string, 
@@ -35,7 +36,7 @@ export function DB<EntityModel, EntityRawModel>(
                 
                 const params: DynamoDB.DocumentClient.GetItemInput = {
                     TableName: tableName,
-                    Key: { [partitionKeyName]: id }
+                    Key: { [partitionKeyName]: DB.castKey(id).partitionKey }
                 };
                 if(attributes) {
                     params.ConsistentRead = attributes.ConsistentRead;
@@ -43,8 +44,8 @@ export function DB<EntityModel, EntityRawModel>(
 
                 if(sortKeyName !== undefined) {
                     if(id.indexOf(sortKeySeparator) < 0) throw new Error('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
-                    params.Key[partitionKeyName] = id.split(sortKeySeparator)[0];
-                    params.Key[sortKeyName] = id.split(sortKeySeparator).splice(1).join(sortKeySeparator);
+                    params.Key[partitionKeyName] = DB.castKey(id).partitionKey;
+                    params.Key[sortKeyName] = DB.castKey(id).sortKey;
                 }
                 
                 const entityData = await DatabaseConfig.DynamoDBDocumentClient().get(params).promise();
@@ -74,7 +75,7 @@ export function DB<EntityModel, EntityRawModel>(
                 }
                 
                 const dataArray = await Promise.all(entityIDsParts.map((entityIDsPart) => {
-                    const params: DynamoDB.BatchGetItemInput  = {
+                    const params: DynamoDB.DocumentClient.BatchGetItemInput  = {
                         RequestItems: {
                             [tableName]: {
                                 Keys: []
@@ -90,8 +91,8 @@ export function DB<EntityModel, EntityRawModel>(
                         } else {
                             if(entityID.indexOf(sortKeySeparator) < 0) throw new Error('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
                             params.RequestItems[tableName].Keys.push({
-                                [partitionKeyName]: entityID.split(sortKeySeparator)[0],
-                                [sortKeyName]: entityID.split(sortKeySeparator).splice(1).join(sortKeySeparator)
+                                [partitionKeyName]: DB.castKey(entityID).partitionKey,
+                                [sortKeyName]: DB.castKey(entityID).sortKey
                             });
                         }
                     }
@@ -158,13 +159,13 @@ export function DB<EntityModel, EntityRawModel>(
 
                 const params: DynamoDB.DocumentClient.DeleteItemInput = {
                     TableName: tableName,
-                    Key: {[partitionKeyName]: id}
+                    Key: {[partitionKeyName]: DB.castKey(id).partitionKey}
                 };
 
                 if(sortKeyName !== undefined) {
                     if(id.indexOf(sortKeySeparator) < 0) throw new Error('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
-                    params.Key[partitionKeyName] = id.split(sortKeySeparator)[0];
-                    params.Key[sortKeyName] = id.split(sortKeySeparator).splice(1).join(sortKeySeparator);
+                    params.Key[partitionKeyName] =  DB.castKey(id).partitionKey;
+                    params.Key[sortKeyName] =  DB.castKey(id).sortKey;
                 }
 
                 await deleteRelated([id]);
@@ -182,7 +183,6 @@ export function DB<EntityModel, EntityRawModel>(
                 const tableName = DB.getTableName();
                 const partitionKeyName = DB.getPartitionKeyName();
                 const sortKeyName = DB.getSortKeyName();
-                const sortKeySeparator = DB.getSortKeySeparator();
 
                 const entityIDsPartsArray: string[][] = [];
                 const partsSize = 25;
@@ -191,7 +191,7 @@ export function DB<EntityModel, EntityRawModel>(
                 }
 
                 for(const entityIDsParts of entityIDsPartsArray) {
-                    const batchWriteParams: DynamoDB.BatchWriteItemInput = {
+                    const batchWriteParams: DynamoDB.DocumentClient.BatchWriteItemInput = {
                         RequestItems: {
                             [tableName]: []
                         }
@@ -201,10 +201,10 @@ export function DB<EntityModel, EntityRawModel>(
                         batchWriteParams.RequestItems[tableName].push({
                             DeleteRequest: {
                                 Key: sortKeyName === undefined ? 
-                                    {[partitionKeyName]: entityIDsPart as any} : 
+                                    {[partitionKeyName]: entityIDsPart} : 
                                     {
-                                        [partitionKeyName]: entityIDsPart.split(sortKeySeparator)[0],
-                                        [sortKeyName]: entityIDsPart.split(sortKeySeparator).splice(1).join(sortKeySeparator)
+                                        [partitionKeyName]: DB.castKey(entityIDsPart).partitionKey,
+                                        [sortKeyName]: DB.castKey(entityIDsPart).sortKey
                                     }
                             }
                         });
@@ -234,7 +234,7 @@ export function DB<EntityModel, EntityRawModel>(
                 let ExpressionAttributeValues: any = {};
 
                 if(filterAttributes) {
-                    FilterExpression = ExpressionCreator.getFilterExpression(filterAttributes as any);
+                    FilterExpression = ExpressionCreator.getFilterExpression(filterAttributes);
                     ExpressionAttributeNames = ExpressionCreator.getExpressionAttributeNames(filterAttributes);
                     ExpressionAttributeValues = ExpressionCreator.getExpressionAttributeValues(filterAttributes);
                 }
@@ -313,21 +313,21 @@ export function DB<EntityModel, EntityRawModel>(
                     });
                 }
 
-                const putRequestParts: any[] = [];
+                const putRequestParts = [];
                 const partsSize = 25;
                 for (let i=0, j=putRequests.length; i<j; i+=partsSize) {
                     putRequestParts.push(putRequests.slice(i,i+partsSize));
                 }
 
                 for(const putRequestPart of putRequestParts) {
-                    const batchWriteParams: DynamoDB.BatchWriteItemInput = {
+                    const batchWriteParams: DynamoDB.DocumentClient.BatchWriteItemInput = {
                         RequestItems: {
-                            [DB.getTableName()]: putRequestPart as any
+                            [DB.getTableName()]: putRequestPart
                         }
                     };
                     await DB.batchWriteWithRetry(batchWriteParams, 0);
                 }
-                return entities as any;
+                return entities;
             }
 
             public static async createBatch(entities: EntityRawModel[]): Promise<EntityModel[]> {
@@ -339,8 +339,8 @@ export function DB<EntityModel, EntityRawModel>(
              *   @params: The parameter for the batchWrite operation.
              *   @retry: This should be 0 when called first, this will be incremented in the recursion.
              */
-            public static async batchWriteWithRetry(params: DynamoDB.BatchWriteItemInput, retry: number): Promise<{}> {
-                console.log('Retry: ' + retry);
+            public static async batchWriteWithRetry(params: DynamoDB.DocumentClient.BatchWriteItemInput, retry: number): Promise<{}> {
+                if(retry > 0) console.log('Retry: ' + retry);
                 if(retry > DatabaseConfig.DynamoDBConfig.maxRetries) throw new Error('Maximum number of batch write retries exceeded.');
                 const data = await DatabaseConfig.DynamoDBDocumentClient().batchWrite(params).promise();
 
@@ -353,6 +353,36 @@ export function DB<EntityModel, EntityRawModel>(
 
                 return {};
             }
+            
+            /**
+             * 
+             * @internal (consider private)
+             */
+            public static castKey(key: string): DynamoDBKey {
+                const config = DatabaseConfig.DynamoDBConfig.tables.find(x => x.name === DB.getTableName());
+                
+                const partitionKey = key.split(DB.getSortKeySeparator())[0];
+                const sortKey = key.split(DB.getSortKeySeparator()).splice(1).join(DB.getSortKeySeparator());
+
+                let partitionKeyTyped: string | number;
+                switch(config!.partitionKeyType) {
+                    case KeyTypeEnum.string: partitionKeyTyped = partitionKey; break;
+                    case KeyTypeEnum.number: partitionKeyTyped = +partitionKey; break;
+                }
+
+                if(!config!.sortKeyName) return { partitionKey: partitionKeyTyped! };
+
+                let sortKeyTyped: string | number;
+                switch(config!.sortKeyType) {
+                    case KeyTypeEnum.string: sortKeyTyped = sortKey; break;
+                    case KeyTypeEnum.number: sortKeyTyped = +sortKey; break;
+                }
+
+                return {
+                    partitionKey: partitionKeyTyped!,
+                    sortKey: sortKeyTyped!
+                };
+            } 
 
         };
 

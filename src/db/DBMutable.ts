@@ -39,8 +39,8 @@ export function DBMutable<EntityModel, EntityRawModel, EntityUpdateModel>(
 
                 if(sortKeyName !== undefined) {
                     if(id.indexOf(sortKeySeparator) < 0) throw new Error('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
-                    updateParams.Key[partitionKeyName] = id.split(sortKeySeparator)[0];
-                    updateParams.Key[sortKeyName] = id.split(sortKeySeparator).splice(1).join(sortKeySeparator);
+                    updateParams.Key[partitionKeyName] = DBMutable.castKey(id).partitionKey;
+                    updateParams.Key[sortKeyName] = DBMutable.castKey(id).sortKey;
                 }
 
                 if(updateAttributes && Object.keys(updateAttributes).length >= 0) {
