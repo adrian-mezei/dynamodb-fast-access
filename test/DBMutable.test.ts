@@ -1,7 +1,7 @@
 import * as AWS from 'aws-sdk';
 import 'mocha';
 import { assert } from 'chai';
-import { DBMutable } from '../db/DBMutable';
+import { DBMutable } from '../src/db/DBMutable';
 
 AWS.config.update({region: 'eu-west-1'});
 AWS.config.update({credentials: {accessKeyId: 'FakeAccessKey', secretAccessKey: 'FakeSecretAccessKey'}});

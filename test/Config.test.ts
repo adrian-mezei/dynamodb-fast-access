@@ -1,4 +1,4 @@
-import { DatabaseConfig } from '../index';
+import { DatabaseConfig } from '../src/index';
 import { assert } from 'chai';
 import 'mocha';
 

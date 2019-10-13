@@ -1,7 +1,7 @@
 import * as AWS from 'aws-sdk';
 import 'mocha';
 import { assert } from 'chai';
-import { DB } from '../db/DB';
+import { DB } from '../src/db/DB';
 
 AWS.config.update({region: 'eu-west-1'});
 AWS.config.update({credentials: {accessKeyId: 'FakeAccessKey', secretAccessKey: 'FakeSecretAccessKey'}});

@@ -1,6 +1,11 @@
 # dynamodb-fast-access
 Default CRUD operations for managing AWS DynamoDB table items in an easy-to-extend structure.
 
+[![Build Status](https://travis-ci.org/adrian-mezei/dynamodb-fast-access.svg?branch=master)](https://travis-ci.org/adrian-mezei/dynamodb-fast-access)
+[![Npm version](https://img.shields.io/npm/v/dynamodb-fast-access.svg?style=flat)](https://www.npmjs.com/package/dynamodb-fast-access)
+[![GitHub license](https://img.shields.io/github/license/adrian-mezei/dynamodb-fast-access)](https://github.com/adrian-mezei/dynamodb-fast-access/blob/master/LICENSE)
+[![Coverage Status](https://coveralls.io/repos/github/adrian-mezei/dynamodb-fast-access/badge.svg?branch=master)](https://coveralls.io/github/adrian-mezei/dynamodb-fast-access?branch=master)
+
 ## Quick example
 ```javascript
 import * as DDFA from 'dynamodb-fast-access';

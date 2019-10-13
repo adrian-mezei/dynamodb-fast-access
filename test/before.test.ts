@@ -1,7 +1,7 @@
 import * as AWS from 'aws-sdk';
-import { DatabaseConfig } from '../index';
+import { DatabaseConfig } from '../src/index';
 import 'mocha';
-import { KeyTypeEnum } from '../model/ConfigModels';
+import { KeyTypeEnum } from '../src/model/ConfigModels';
 
 AWS.config.update({region: 'eu-west-1'});
 AWS.config.update({credentials: {accessKeyId: 'FakeAccessKey', secretAccessKey: 'FakeSecretAccessKey'}});
