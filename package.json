@@ -5,10 +5,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "tsc && nyc mocha",
+    "test": "tsc && nyc --reporter=lcov --reporter=text-summary mocha",
     "build": "tsc",
     "lint": "tslint -p tsconfig.json",
-    "coverage": "nyc --reporter=lcov --reporter=text-summary npm run test",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
