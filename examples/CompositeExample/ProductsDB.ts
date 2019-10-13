@@ -1,6 +1,6 @@
-import { DBCompositeMutable } from '../../db/DBCompositeMutable';
-import { DatabaseConfig } from '../../util/DatabaseConfig';
-import { KeyTypeEnum } from '../../model/ConfigModels';
+import { DBCompositeMutable } from '../../src/db/DBCompositeMutable';
+import { DatabaseConfig } from '../../src/util/DatabaseConfig';
+import { KeyTypeEnum } from '../../src/model/ConfigModels';
 
 // Initiate by passing the config (you can also load this from a config file)
 DatabaseConfig.init({
