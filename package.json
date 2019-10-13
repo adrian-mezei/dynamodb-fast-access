@@ -5,10 +5,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "tsc && nyc mocha",
+    "test": "tsc && nyc --reporter=lcov --reporter=text mocha",
+    "startLocalDB": "java -Djava.library.path=./res/DynamoDBLocal/DynamoDBLocal_lib -jar res/DynamoDBLocal/DynamoDBLocal.jar -sharedDb -inMemory -port 3000 &",
     "build": "tsc",
     "lint": "tslint -p tsconfig.json",
-    "coverage": "nyc --reporter=lcov --reporter=text-summary npm run test",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",

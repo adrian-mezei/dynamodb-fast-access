@@ -4,6 +4,7 @@ import { ListModel } from '../model/ListModel';
 import { DatabaseConfig } from '../util/DatabaseConfig';
 import { EntityExtender, DefaultEntityExtender } from './EntityExtender';
 import { DefaultEntityRelatedDeleter, EntityRelatedDeleter } from './EntityRelatedDeleter';
+import { DynamoDBFastAccessError } from '../util/DynamoDBFastAccessError';
 
 export function DBComposite<EntityModel, EntityRawModel>(
     tableName: string, 
@@ -81,7 +82,7 @@ export function DBComposite<EntityModel, EntityRawModel>(
                 const partitionKeyName = DBComposite.getPartitionKeyName();
                 const sortKeyName = DBComposite.getSortKeyName();
                 
-                if(sortKeyName === undefined) throw new Error('Sort key name is undefined for table ' + tableName + '.');
+                if(sortKeyName === undefined) throw new DynamoDBFastAccessError('Sort key name is undefined for table ' + tableName + '.');
 
                 const queryParams: DynamoDB.DocumentClient.QueryInput = {
                     TableName: tableName,
@@ -118,7 +119,7 @@ export function DBComposite<EntityModel, EntityRawModel>(
                 const tableName = DBComposite.getTableName();
                 const partitionKeyName = DBComposite.getPartitionKeyName();
                 const sortKeyName = DBComposite.getSortKeyName();
-                if(sortKeyName === undefined) throw new Error('Sort key name is undefined for table ' + tableName + '.');
+                if(sortKeyName === undefined) throw new DynamoDBFastAccessError('Sort key name is undefined for table ' + tableName + '.');
 
                 const queryParams: DynamoDB.DocumentClient.QueryInput = {
                     TableName: tableName,

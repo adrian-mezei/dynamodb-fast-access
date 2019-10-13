@@ -4,6 +4,7 @@ import { DB } from './DB';
 import { DatabaseConfig } from '../util/DatabaseConfig';
 import { EntityExtender, DefaultEntityExtender } from './EntityExtender';
 import { EntityRelatedDeleter, DefaultEntityRelatedDeleter } from './EntityRelatedDeleter';
+import { DynamoDBFastAccessError } from '../util/DynamoDBFastAccessError';
 
 export function DBMutable<EntityModel, EntityRawModel, EntityUpdateModel>(
     tableName: string, 
@@ -38,7 +39,7 @@ export function DBMutable<EntityModel, EntityRawModel, EntityUpdateModel>(
                 };
 
                 if(sortKeyName !== undefined) {
-                    if(id.indexOf(sortKeySeparator) < 0) throw new Error('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
+                    if(id.indexOf(sortKeySeparator) < 0) throw new DynamoDBFastAccessError('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
                     updateParams.Key[partitionKeyName] = DBMutable.castKey(id).partitionKey;
                     updateParams.Key[sortKeyName] = DBMutable.castKey(id).sortKey;
                 }

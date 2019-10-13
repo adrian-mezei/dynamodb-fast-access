@@ -4,6 +4,7 @@ import { DatabaseConfig } from '../util/DatabaseConfig';
 import { EntityExtender, DefaultEntityExtender } from './EntityExtender';
 import { EntityRelatedDeleter, DefaultEntityRelatedDeleter } from './EntityRelatedDeleter';
 import { DynamoDBKey, KeyTypeEnum } from '../model/ConfigModels';
+import { DynamoDBFastAccessError } from '../util/DynamoDBFastAccessError';
 
 export function DB<EntityModel, EntityRawModel>(
     tableName: string, 
@@ -43,13 +44,13 @@ export function DB<EntityModel, EntityRawModel>(
                 }
 
                 if(sortKeyName !== undefined) {
-                    if(id.indexOf(sortKeySeparator) < 0) throw new Error('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
+                    if(id.indexOf(sortKeySeparator) < 0) throw new DynamoDBFastAccessError('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
                     params.Key[partitionKeyName] = DB.castKey(id).partitionKey;
                     params.Key[sortKeyName] = DB.castKey(id).sortKey;
                 }
                 
                 const entityData = await DatabaseConfig.DynamoDBDocumentClient().get(params).promise();
-                if(!entityData.Item) throw new Error('Resource does not exist.');
+                if(!entityData.Item) throw new DynamoDBFastAccessError('Resource does not exist.');
                 
                 return entityData.Item as EntityRawModel;
             }
@@ -89,7 +90,7 @@ export function DB<EntityModel, EntityRawModel>(
                                 [partitionKeyName]: entityID
                             }); 
                         } else {
-                            if(entityID.indexOf(sortKeySeparator) < 0) throw new Error('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
+                            if(entityID.indexOf(sortKeySeparator) < 0) throw new DynamoDBFastAccessError('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
                             params.RequestItems[tableName].Keys.push({
                                 [partitionKeyName]: DB.castKey(entityID).partitionKey,
                                 [sortKeyName]: DB.castKey(entityID).sortKey
@@ -163,7 +164,7 @@ export function DB<EntityModel, EntityRawModel>(
                 };
 
                 if(sortKeyName !== undefined) {
-                    if(id.indexOf(sortKeySeparator) < 0) throw new Error('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
+                    if(id.indexOf(sortKeySeparator) < 0) throw new DynamoDBFastAccessError('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
                     params.Key[partitionKeyName] =  DB.castKey(id).partitionKey;
                     params.Key[sortKeyName] =  DB.castKey(id).sortKey;
                 }
@@ -341,7 +342,7 @@ export function DB<EntityModel, EntityRawModel>(
              */
             public static async batchWriteWithRetry(params: DynamoDB.DocumentClient.BatchWriteItemInput, retry: number): Promise<{}> {
                 if(retry > 0) console.log('Retry: ' + retry);
-                if(retry > DatabaseConfig.DynamoDBConfig.maxRetries) throw new Error('Maximum number of batch write retries exceeded.');
+                if(retry > DatabaseConfig.DynamoDBConfig.maxRetries) throw new DynamoDBFastAccessError('Maximum number of batch write retries exceeded.');
                 const data = await DatabaseConfig.DynamoDBDocumentClient().batchWrite(params).promise();
 
                 if(data.UnprocessedItems && Object.keys(data.UnprocessedItems).length > 0) {
