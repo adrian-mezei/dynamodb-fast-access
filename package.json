@@ -1,6 +1,6 @@
 {
   "name": "dynamodb-fast-access",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Default CRUD operations for managing AWS DynamoDB table items in an easy-to-extend structure.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,6 +8,7 @@
     "test": "tsc && nyc --reporter=lcov --reporter=text-summary mocha",
     "build": "tsc",
     "lint": "tslint -p tsconfig.json",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
