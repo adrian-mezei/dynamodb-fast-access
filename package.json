@@ -19,10 +19,15 @@
     "url": "git+https://github.com/adrian-mezei/dynamodb-fast-access.git"
   },
   "keywords": [
-    "dynamodb",
+    "DynamoDB",
     "CRUD",
     "fast",
-    "access"
+    "access",
+    "AWS",
+    "database",
+    "NoSQL",
+    "Node.js",
+    "Amazon"
   ],
   "author": "Adrián Mezei",
   "license": "MIT",
