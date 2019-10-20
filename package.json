@@ -1,6 +1,6 @@
 {
   "name": "dynamodb-fast-access",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Default CRUD operations for managing AWS DynamoDB table items in an easy-to-extend structure.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,10 +20,15 @@
     "url": "git+https://github.com/adrian-mezei/dynamodb-fast-access.git"
   },
   "keywords": [
-    "dynamodb",
+    "DynamoDB",
     "CRUD",
     "fast",
-    "access"
+    "access",
+    "AWS",
+    "database",
+    "NoSQL",
+    "Node.js",
+    "Amazon"
   ],
   "author": "Adrián Mezei",
   "license": "MIT",
