@@ -37,7 +37,7 @@ export function DB<EntityModel, EntityRawModel>(
                 
                 const params: DynamoDB.DocumentClient.GetItemInput = {
                     TableName: tableName,
-                    Key: { [partitionKeyName]: DB.castKey(id).partitionKey }
+                    Key: { [partitionKeyName]: DB._castKey(id).partitionKey }
                 };
                 if(attributes) {
                     params.ConsistentRead = attributes.ConsistentRead;
@@ -45,8 +45,8 @@ export function DB<EntityModel, EntityRawModel>(
 
                 if(sortKeyName !== undefined) {
                     if(id.indexOf(sortKeySeparator) < 0) throw new DynamoDBFastAccessError('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
-                    params.Key[partitionKeyName] = DB.castKey(id).partitionKey;
-                    params.Key[sortKeyName] = DB.castKey(id).sortKey;
+                    params.Key[partitionKeyName] = DB._castKey(id).partitionKey;
+                    params.Key[sortKeyName] = DB._castKey(id).sortKey;
                 }
                 
                 const entityData = await DatabaseConfig.DynamoDBDocumentClient().get(params).promise();
@@ -92,8 +92,8 @@ export function DB<EntityModel, EntityRawModel>(
                         } else {
                             if(entityID.indexOf(sortKeySeparator) < 0) throw new DynamoDBFastAccessError('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
                             params.RequestItems[tableName].Keys.push({
-                                [partitionKeyName]: DB.castKey(entityID).partitionKey,
-                                [sortKeyName]: DB.castKey(entityID).sortKey
+                                [partitionKeyName]: DB._castKey(entityID).partitionKey,
+                                [sortKeyName]: DB._castKey(entityID).sortKey
                             });
                         }
                     }
@@ -116,8 +116,8 @@ export function DB<EntityModel, EntityRawModel>(
             }
 
             public static scanFilteredRaw(filterAttributes?: Partial<EntityRawModel>, arrayContainsAttribute?: { arrayName: string, value: string }): Promise<EntityRawModel[]> {
-                const scanParams = DB.buildScanParams(filterAttributes, arrayContainsAttribute);
-                return DB.scanRaw(scanParams, []);
+                const scanParams = DB._buildScanParams(filterAttributes, arrayContainsAttribute);
+                return DB._scanRaw(scanParams, []);
             }
 
             public static async scanFiltered(filterAttributes?: object, arrayContainsAttribute?: { arrayName: string, value: string }): Promise<EntityModel[]> {
@@ -126,30 +126,22 @@ export function DB<EntityModel, EntityRawModel>(
                 return extend(rawEntities);
             }
 
-            /**
-             * 
-             * @internal (consider private)
-             */
-            public static async scanRaw(params: DynamoDB.DocumentClient.ScanInput, items: EntityRawModel[]): Promise<EntityRawModel[]> {
+            public static async _scanRaw(params: DynamoDB.DocumentClient.ScanInput, items: EntityRawModel[]): Promise<EntityRawModel[]> {
                 const data = await DatabaseConfig.DynamoDBDocumentClient().scan(params).promise();
                 if(data.Items) items = items.concat(data.Items as EntityRawModel[]);
                 if(!data.LastEvaluatedKey) return items;
                 
                 params.ExclusiveStartKey = data.LastEvaluatedKey;
-                return DB.scanRaw(params, items); 
+                return DB._scanRaw(params, items); 
             }
 
-            /**
-             * 
-             * @internal (consider private)
-             */
-            public static async scan(params: DynamoDB.DocumentClient.ScanInput, items: EntityRawModel[]): Promise<EntityModel[]> {
+            public static async _scan(params: DynamoDB.DocumentClient.ScanInput, items: EntityRawModel[]): Promise<EntityModel[]> {
                 const data = await DatabaseConfig.DynamoDBDocumentClient().scan(params).promise();
                 if(data.Items) items = items.concat(data.Items as EntityRawModel[]);
                 if(!data.LastEvaluatedKey) return extend(items);
                 
                 params.ExclusiveStartKey = data.LastEvaluatedKey;
-                return extend(await DB.scanRaw(params, items)); 
+                return extend(await DB._scanRaw(params, items)); 
             }
 
             public static async deleteById(id: string): Promise<string> {
@@ -160,13 +152,13 @@ export function DB<EntityModel, EntityRawModel>(
 
                 const params: DynamoDB.DocumentClient.DeleteItemInput = {
                     TableName: tableName,
-                    Key: {[partitionKeyName]: DB.castKey(id).partitionKey}
+                    Key: {[partitionKeyName]: DB._castKey(id).partitionKey}
                 };
 
                 if(sortKeyName !== undefined) {
                     if(id.indexOf(sortKeySeparator) < 0) throw new DynamoDBFastAccessError('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
-                    params.Key[partitionKeyName] =  DB.castKey(id).partitionKey;
-                    params.Key[sortKeyName] =  DB.castKey(id).sortKey;
+                    params.Key[partitionKeyName] =  DB._castKey(id).partitionKey;
+                    params.Key[sortKeyName] =  DB._castKey(id).sortKey;
                 }
 
                 await deleteRelated([id]);
@@ -204,30 +196,26 @@ export function DB<EntityModel, EntityRawModel>(
                                 Key: sortKeyName === undefined ? 
                                     {[partitionKeyName]: entityIDsPart} : 
                                     {
-                                        [partitionKeyName]: DB.castKey(entityIDsPart).partitionKey,
-                                        [sortKeyName]: DB.castKey(entityIDsPart).sortKey
+                                        [partitionKeyName]: DB._castKey(entityIDsPart).partitionKey,
+                                        [sortKeyName]: DB._castKey(entityIDsPart).sortKey
                                     }
                             }
                         });
                     }
 
                     await deleteRelated(entityIDsParts);
-                    await DB.batchWriteWithRetry(batchWriteParams, 0);
+                    await DB._batchWriteWithRetry(batchWriteParams, 0);
                 }
 
                 return ids;
             }
 
             public static async deleteScanFiltered(filterAttributes?: Partial<EntityRawModel>, arrayContains?: { arrayName: string, value: string } ): Promise<{}> {
-                const scanParams = DB.buildScanParams(filterAttributes, arrayContains);
-                return DB.scanDelete(scanParams);
+                const scanParams = DB._buildScanParams(filterAttributes, arrayContains);
+                return DB._scanDelete(scanParams);
             }
 
-            /**
-             * 
-             * @internal (consider private)
-             */
-            public static buildScanParams(filterAttributes?: Partial<EntityRawModel>, arrayContainsAttribute?: { arrayName: string, value: string }): DynamoDB.DocumentClient.ScanInput {
+            public static _buildScanParams(filterAttributes?: Partial<EntityRawModel>, arrayContainsAttribute?: { arrayName: string, value: string }): DynamoDB.DocumentClient.ScanInput {
                 const tableName = DB.getTableName();
                 
                 let FilterExpression = '';
@@ -256,11 +244,7 @@ export function DB<EntityModel, EntityRawModel>(
                 return params;
             }
 
-            /**
-             * 
-             * @internal (consider private)
-             */
-            public static async scanDelete(params: DynamoDB.DocumentClient.ScanInput): Promise<{}> {
+            public static async _scanDelete(params: DynamoDB.DocumentClient.ScanInput): Promise<{}> {
                 const partitionKeyName = DB.getPartitionKeyName();
                 const sortKeyName = DB.getSortKeyName();
                 const sortKeySeparator = DB.getSortKeySeparator();
@@ -281,7 +265,7 @@ export function DB<EntityModel, EntityRawModel>(
                 if(!data.LastEvaluatedKey) return {};
 
                 params.ExclusiveStartKey = data.LastEvaluatedKey;
-                return DB.scanDelete(params);
+                return DB._scanDelete(params);
             }
 
             public static async createRaw(entity: EntityRawModel): Promise<EntityRawModel> {
@@ -326,7 +310,7 @@ export function DB<EntityModel, EntityRawModel>(
                             [DB.getTableName()]: putRequestPart
                         }
                     };
-                    await DB.batchWriteWithRetry(batchWriteParams, 0);
+                    await DB._batchWriteWithRetry(batchWriteParams, 0);
                 }
                 return entities;
             }
@@ -336,11 +320,10 @@ export function DB<EntityModel, EntityRawModel>(
             }
 
             /**
-             *   @internal (consider private)
              *   @params: The parameter for the batchWrite operation.
              *   @retry: This should be 0 when called first, this will be incremented in the recursion.
              */
-            public static async batchWriteWithRetry(params: DynamoDB.DocumentClient.BatchWriteItemInput, retry: number): Promise<{}> {
+            public static async _batchWriteWithRetry(params: DynamoDB.DocumentClient.BatchWriteItemInput, retry: number): Promise<{}> {
                 if(retry > 0) console.log('Retry: ' + retry);
                 if(retry > DatabaseConfig.DynamoDBConfig.maxRetries) throw new DynamoDBFastAccessError('Maximum number of batch write retries exceeded.');
                 const data = await DatabaseConfig.DynamoDBDocumentClient().batchWrite(params).promise();
@@ -349,17 +332,13 @@ export function DB<EntityModel, EntityRawModel>(
                     const waitTimeout = Math.pow(2, retry) * 50 * Math.random();
                     params.RequestItems = data.UnprocessedItems;
                     await new Promise(res => setTimeout(res, waitTimeout) );
-                    await DB.batchWriteWithRetry(params, retry + 1);
+                    await DB._batchWriteWithRetry(params, retry + 1);
                 }
 
                 return {};
             }
             
-            /**
-             * 
-             * @internal (consider private)
-             */
-            public static castKey(key: string): DynamoDBKey {
+            public static _castKey(key: string): DynamoDBKey {
                 const config = DatabaseConfig.DynamoDBConfig.tables.find(x => x.name === DB.getTableName());
                 
                 const partitionKey = key.split(DB.getSortKeySeparator())[0];

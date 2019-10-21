@@ -40,8 +40,8 @@ export function DBMutable<EntityModel, EntityRawModel, EntityUpdateModel>(
 
                 if(sortKeyName !== undefined) {
                     if(id.indexOf(sortKeySeparator) < 0) throw new DynamoDBFastAccessError('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
-                    updateParams.Key[partitionKeyName] = DBMutable.castKey(id).partitionKey;
-                    updateParams.Key[sortKeyName] = DBMutable.castKey(id).sortKey;
+                    updateParams.Key[partitionKeyName] = DBMutable._castKey(id).partitionKey;
+                    updateParams.Key[sortKeyName] = DBMutable._castKey(id).sortKey;
                 }
 
                 if(updateAttributes && Object.keys(updateAttributes).length >= 0) {

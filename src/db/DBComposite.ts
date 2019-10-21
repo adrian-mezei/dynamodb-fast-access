@@ -14,8 +14,8 @@ export function DBComposite<EntityModel, EntityRawModel>(
         return class DBComposite extends DB<EntityModel, EntityRawModel>(tableName, extend, deleteRelated) {
 
             public static async queryRecurseRaw(partitionKeyValue: string, exclusiveStartKey?: string): Promise<EntityRawModel[]> {
-                const queryParams = DBComposite.getQueryParameter(partitionKeyValue, exclusiveStartKey);
-                return DBComposite.queryRecurseNative(queryParams, []);
+                const queryParams = DBComposite._getQueryParameter(partitionKeyValue, exclusiveStartKey);
+                return DBComposite._queryRecurseNative(queryParams, []);
             }
 
             public static async queryRecurse(partitionKeyValue: string, exclusiveStartKey?: string): Promise<EntityModel[]> {
@@ -24,8 +24,8 @@ export function DBComposite<EntityModel, EntityRawModel>(
             }
             
             public static async queryBeginsWithRecurseRaw(partitionKeyValue: string, sortKeyBeginsWithValue?: string, exclusiveStartKey?: string): Promise<EntityRawModel[]> {
-                const queryParams = DBComposite.getBeginsWithQueryParameter(partitionKeyValue, sortKeyBeginsWithValue, exclusiveStartKey);
-                return DBComposite.queryRecurseNative(queryParams, []);
+                const queryParams = DBComposite._getBeginsWithQueryParameter(partitionKeyValue, sortKeyBeginsWithValue, exclusiveStartKey);
+                return DBComposite._queryRecurseNative(queryParams, []);
             }
 
             public static async queryBeginsWithRecurse(partitionKeyValue: string, sortKeyBeginsWithValue?: string, exclusiveStartKey?: string): Promise<EntityModel[]> {
@@ -34,7 +34,7 @@ export function DBComposite<EntityModel, EntityRawModel>(
             }
 
             public static async queryBeginsWithRaw(partitionKeyValue: string, sortKeyBeginsWithValue?: string, exclusiveStartKey?: string): Promise<ListModel<EntityRawModel>> {
-                const queryParams = DBComposite.getBeginsWithQueryParameter(partitionKeyValue, sortKeyBeginsWithValue, exclusiveStartKey);
+                const queryParams = DBComposite._getBeginsWithQueryParameter(partitionKeyValue, sortKeyBeginsWithValue, exclusiveStartKey);
                 
                 const data = await DatabaseConfig.DynamoDBDocumentClient().query(queryParams).promise();
 
@@ -54,7 +54,7 @@ export function DBComposite<EntityModel, EntityRawModel>(
             }
 
             public static async queryRaw(partitionKeyValue: string, exclusiveStartKey?: string): Promise<ListModel<EntityRawModel>> {
-                const queryParams = DBComposite.getBeginsWithQueryParameter(partitionKeyValue, exclusiveStartKey);
+                const queryParams = DBComposite._getBeginsWithQueryParameter(partitionKeyValue, exclusiveStartKey);
                 
                 const data = await DatabaseConfig.DynamoDBDocumentClient().query(queryParams).promise();
 
@@ -73,11 +73,7 @@ export function DBComposite<EntityModel, EntityRawModel>(
                 };
             }
 
-            /**
-             * 
-             * @internal (consider private)
-             */
-            public static getBeginsWithQueryParameter(partitionKeyValue: string, sortKeyBeginsWithValue?: string, exclusiveStartKey?: string): DynamoDB.DocumentClient.QueryInput {
+            public static _getBeginsWithQueryParameter(partitionKeyValue: string, sortKeyBeginsWithValue?: string, exclusiveStartKey?: string): DynamoDB.DocumentClient.QueryInput {
                 const tableName = DBComposite.getTableName();
                 const partitionKeyName = DBComposite.getPartitionKeyName();
                 const sortKeyName = DBComposite.getSortKeyName();
@@ -103,19 +99,15 @@ export function DBComposite<EntityModel, EntityRawModel>(
 
                 if(exclusiveStartKey !== undefined) {
                     queryParams.ExclusiveStartKey = {
-                        [partitionKeyName]: DBComposite.castKey(exclusiveStartKey).partitionKey,
-                        [sortKeyName]: DBComposite.castKey(exclusiveStartKey).sortKey
+                        [partitionKeyName]: DBComposite._castKey(exclusiveStartKey).partitionKey,
+                        [sortKeyName]: DBComposite._castKey(exclusiveStartKey).sortKey
                     };
                 }
 
                 return queryParams;
             }
 
-            /**
-             * 
-             * @internal (consider private)
-             */
-            public static getQueryParameter(partitionKeyValue: string, exclusiveStartKey?: string): DynamoDB.DocumentClient.QueryInput {
+            public static _getQueryParameter(partitionKeyValue: string, exclusiveStartKey?: string): DynamoDB.DocumentClient.QueryInput {
                 const tableName = DBComposite.getTableName();
                 const partitionKeyName = DBComposite.getPartitionKeyName();
                 const sortKeyName = DBComposite.getSortKeyName();
@@ -134,19 +126,15 @@ export function DBComposite<EntityModel, EntityRawModel>(
 
                 if(exclusiveStartKey !== undefined) {
                     queryParams.ExclusiveStartKey = {
-                        [partitionKeyName]: DBComposite.castKey(exclusiveStartKey).partitionKey,
-                        [sortKeyName]: DBComposite.castKey(exclusiveStartKey).sortKey
+                        [partitionKeyName]: DBComposite._castKey(exclusiveStartKey).partitionKey,
+                        [sortKeyName]: DBComposite._castKey(exclusiveStartKey).sortKey
                     };
                 }
 
                 return queryParams;
             }
 
-            /**
-             * 
-             * @internal (consider private)
-             */
-            public static async queryRecurseNative(params: DynamoDB.DocumentClient.QueryInput, items: EntityRawModel[]): Promise<EntityRawModel[]> {
+            public static async _queryRecurseNative(params: DynamoDB.DocumentClient.QueryInput, items: EntityRawModel[]): Promise<EntityRawModel[]> {
                 const data = await DatabaseConfig.DynamoDBDocumentClient().query(params).promise();
                     
                 if(data.Items) items = items.concat(data.Items as EntityRawModel[]);
@@ -155,7 +143,7 @@ export function DBComposite<EntityModel, EntityRawModel>(
                 
                 params.ExclusiveStartKey = data.LastEvaluatedKey;
         
-                return DBComposite.queryRecurseNative(params, items);
+                return DBComposite._queryRecurseNative(params, items);
             }
 
             public static combineKeys(dynamoDBKey: DynamoDB.DocumentClient.Key): string {
