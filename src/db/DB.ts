@@ -17,6 +17,9 @@ export function DB<EntityModel, EntityRawModel>(
                 return sortKeySeparator === undefined ? '$' : sortKeySeparator;
             }
 
+            /**
+             * Returns the name of the table.
+             */
             public static getTableName(): string {
                 return DatabaseConfig.DynamoDBConfig.tables.find(x => x.name === tableName)!.name;
             }

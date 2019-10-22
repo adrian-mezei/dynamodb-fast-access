@@ -12,6 +12,11 @@ export function DBMutable<EntityModel, EntityRawModel, EntityUpdateModel>(
     deleteRelated: EntityRelatedDeleter = DefaultEntityRelatedDeleter) {
        
         return class DBMutable extends DB<EntityModel, EntityRawModel>(tableName, extend, deleteRelated) {
+            /**
+             * Updates the provided attributes of the object with the provided id.
+             * @param id The id of the object to update.
+             * @param updateAttributes The attributes of the object to update.
+             */
             public static updateById(id: string, updateAttributes: EntityUpdateModel): Promise<EntityUpdateModel> {
                 return DBMutable.updateByIdWithDelete(id, updateAttributes, []);
             }
