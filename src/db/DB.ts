@@ -3,30 +3,49 @@ import { ExpressionCreator } from './ExpressionCreator';
 import { DatabaseConfig } from '../util/DatabaseConfig';
 import { EntityExtender, DefaultEntityExtender } from './EntityExtender';
 import { EntityRelatedDeleter, DefaultEntityRelatedDeleter } from './EntityRelatedDeleter';
-import { DynamoDBKey, KeyTypeEnum } from '../model/ConfigModels';
+import { DynamoDBKey, KeyTypeEnum, DynamoDBTable } from '../model/ConfigModels';
 import { DynamoDBFastAccessError } from '../util/DynamoDBFastAccessError';
 
 export function DB<EntityModel, EntityRawModel>(
-    tableName: string, 
+    tableAlias: string, 
     extend: EntityExtender<EntityModel, EntityRawModel> = DefaultEntityExtender, 
     deleteRelated: EntityRelatedDeleter = DefaultEntityRelatedDeleter) {
 
         return class DB {
+            public static getTableConfig(): DynamoDBTable {
+                const tableConfig = DatabaseConfig.DynamoDBConfig.tables.find(x => x.tableAlias === tableAlias);
+                if(tableConfig === undefined) throw new DynamoDBFastAccessError('Table configuration with the given alias does not exist.');
+
+                return tableConfig;
+            }
+
             public static getSortKeySeparator(): string {
-                const sortKeySeparator = DatabaseConfig.DynamoDBConfig.tables.find(x => x.name === tableName)!.sortKeySeparator;
+                const sortKeySeparator = DB.getTableConfig().sortKeySeparator;
                 return sortKeySeparator === undefined ? '$' : sortKeySeparator;
             }
 
+            public static getTableAlias(): string {
+                return DB.getTableConfig().tableAlias;
+            }
+
             public static getTableName(): string {
-                return DatabaseConfig.DynamoDBConfig.tables.find(x => x.name === tableName)!.name;
+                return DB.getTableConfig().tableName;
             }
 
             public static getPartitionKeyName(): string {
-                return DatabaseConfig.DynamoDBConfig.tables.find(x => x.name === tableName)!.partitionKeyName;
+                return DB.getTableConfig().partitionKeyName;
+            }
+
+            public static getPartitionKeyType(): string {
+                return DB.getTableConfig().partitionKeyType;
             }
 
             public static getSortKeyName(): string | undefined {
-                return DatabaseConfig.DynamoDBConfig.tables.find(x => x.name === tableName)!.sortKeyName;
+                return DB.getTableConfig().sortKeyName;
+            }
+
+            public static getSortKeyType(): string | undefined {
+                return DB.getTableConfig().sortKeyType;
             }
 
             public static async getByIdRaw(id: string, attributes?: { ConsistentRead?: boolean }): Promise<EntityRawModel> {
@@ -339,21 +358,19 @@ export function DB<EntityModel, EntityRawModel>(
             }
             
             public static _castKey(key: string): DynamoDBKey {
-                const config = DatabaseConfig.DynamoDBConfig.tables.find(x => x.name === DB.getTableName());
-                
                 const partitionKey = key.split(DB.getSortKeySeparator())[0];
                 const sortKey = key.split(DB.getSortKeySeparator()).splice(1).join(DB.getSortKeySeparator());
 
                 let partitionKeyTyped: string | number;
-                switch(config!.partitionKeyType) {
+                switch(DB.getPartitionKeyType()) {
                     case KeyTypeEnum.string: partitionKeyTyped = partitionKey; break;
                     case KeyTypeEnum.number: partitionKeyTyped = +partitionKey; break;
                 }
 
-                if(!config!.sortKeyName) return { partitionKey: partitionKeyTyped! };
+                if(!DB.getSortKeyName()) return { partitionKey: partitionKeyTyped! };
 
                 let sortKeyTyped: string | number;
-                switch(config!.sortKeyType) {
+                switch(DB.getSortKeyType()) {
                     case KeyTypeEnum.string: sortKeyTyped = sortKey; break;
                     case KeyTypeEnum.number: sortKeyTyped = +sortKey; break;
                 }

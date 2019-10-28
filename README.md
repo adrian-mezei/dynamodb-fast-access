@@ -14,7 +14,8 @@ DDFA.DatabaseConfig.init({
     apiVersion: '2012-08-10',
     maxRetries: 9,
     tables: [{
-        name: 'Products',
+        tableAlias: 'Products',
+        tableName: 'Products_test',
         partitionKeyName: 'id',
         partitionKeyType: KeyTypeEnum.string,
     }]
@@ -35,12 +36,12 @@ ProductsDB.deleteById('123456abc');
 
 1. Configure the library by invoking the `init` function with the database configuration parameters. You can optionally provide your own configured AWS DynamoDB DocumentClient instance, otherwise it will be created.
 
-1. (optional) Create the models for your database objects:
+1. (optional, recommended) Create the models for your database objects:
     - **RawModel**: that describes the object that is stored in the database.
     - **Model**: that describes the object that is stored in the database extended by additional derived attributes.
     - **UpdateModel**: that describes the attributes of the object that is stored in the database that are mutable.
 
-1. (otional) Create the **extender** function that accepts **RawModel** type object array and returns **Model** type object array. This will extend your the raw database object upon request. (The default **extender** function does not modify the database objects.)
+1. (otional, recommended) Create the **extender** function that accepts **RawModel** type object array and returns **Model** type object array. This will extend your the raw database object upon request. (The default **extender** function does not modify the database objects.)
 
 1. (otional) Create the **deleter** function to perform some task before the object is being deleted. This function is invoked before an item is deleted. (The default **deleter** function does not do anything.)
 
@@ -53,7 +54,8 @@ ProductsDB.deleteById('123456abc');
 | apiVersion | false | string | DynamoDB javascript SDK api version [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html). |
 | maxRetries | true | number | Maximum number of retries for batch write with an exponential backoff algorithm as it is recommended in the DynamoDB API reference [here](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html). |
 | tables | true | array | The array of DynamoDB table configurations. |
-| tables[].name | true | string | The name of the DynamoDB table. |
+| tables[].tableAlias | true | string | The alias of the DynamoDB table. Table configuration is referenced by this alias attribute when its base class is created. |
+| tables[].tableName | true | string | The name of the DynamoDB table. |
 | tables[].partitionKeyName | true | string | The name of the partition key of the DynamoDB table. |
 | tables[].partitionKeyType | true | enum | The type of the partition key of the DynamoDB table. Possible values: 'string', 'number'. |
 | tables[].sortKeyName | false | string | The name of the sort key of the DynamoDB table. |
@@ -73,7 +75,8 @@ Example:
     apiVersion: '2012-08-10',
     maxRetries: 9,
     tables: [{
-        name: 'Products',
+        tableAlias: 'Products',
+        tableName: 'Products_test',
         partitionKeyName: 'id',
         partitionKeyType: 'string',
         sortKeyName: 'timestamp',
@@ -86,9 +89,12 @@ Example:
 ## Provided function descriptions
 | Function | Description |
 |---------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| getTableAlias | Returns the configured alias of the DynamoDB table. |
 | getTableName | Returns the configured name of the DynamoDB table. |
 | getPartitionKeyName | Returns the configured name of the partition key of the DynamoDB table. |
+| getPartitionKeyType | Returns the configured type of the partition key of the DynamoDB table. |
 | getSortKeyName | Returns the configured name of the sort key of the DynamoDB table. |
+| getSortKeyType | Returns the configured type of the sort key of the DynamoDB table. |
 | getSortKeySeparator | Returns the string that separates the partition key and sort key. |
 | create | Creates an entry in the DynamoDB table and returns the extended entry. |
 | createRaw | Creates an entry in the DynamoDB table and returns the raw entry. |
@@ -116,11 +122,14 @@ Example:
 | combineKeys | Combines the provided DynamoDB Key object attributes by concatenating the partition key and the optional sort key by the configured separator. |
 
 ## Base class functions
-| Function                  | DB | DBComposite | DBMutable | DBCompositeMutable |
-|---------------------------|:--:|:-----------:|:---------:|:------------------:|
+| Function                  | DB | DBComposite | DBMutable  | DBCompositeMutable |
+|---------------------------|:--:|:-----------:|:----------:|:------------------:|
+| getTableAlias             |  ✓ |      ✓      |     ✓     |          ✓         |
 | getTableName              |  ✓ |      ✓      |     ✓     |          ✓         |
 | getPartitionKeyName       |  ✓ |      ✓      |     ✓     |          ✓         |
+| getPartitionKeyType       |  ✓ |      ✓      |     ✓     |          ✓         |
 | getSortKeyName            |  ✓ |      ✓      |     ✓     |          ✓         |
+| getSortKeyType            |  ✓ |      ✓      |     ✓     |          ✓         |
 | getSortKeySeparator       |  ✓ |      ✓      |     ✓     |          ✓         |
 | create                    |  ✓ |      ✓      |     ✓     |          ✓         |
 | createRaw                 |  ✓ |      ✓      |     ✓     |          ✓         |

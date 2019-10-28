@@ -4,8 +4,9 @@ export interface DynamoDBConfigModel {
     tables: DynamoDBTable[];
 }
 
-interface DynamoDBTable {
-    name: string;
+export interface DynamoDBTable {
+    tableAlias: string;
+    tableName: string;
     partitionKeyName: string;
     partitionKeyType: KeyTypeEnum;
     sortKeyName?: string;

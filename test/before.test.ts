@@ -14,14 +14,16 @@ const dynamoConfig = {
 const DynamoDB = new AWS.DynamoDB(dynamoConfig);
 const DynamoDBDocumentClient = new AWS.DynamoDB.DocumentClient(dynamoConfig);
 const tableConfigs = [{
-    name: 'ProductsTimestamp',
+    tableAlias: 'ProductsTimestamp',
+    tableName: 'ProductsTimestamp',
     partitionKeyName: 'id',
     partitionKeyType: KeyTypeEnum.string,
     sortKeyName: 'timestamp',
     sortKeyType: KeyTypeEnum.number,
     sortKeySeparator: '$'
 },{
-    name: 'ProductsDay',
+    tableAlias: 'ProductsDay',
+    tableName: 'ProductsDay',
     partitionKeyName: 'id',
     partitionKeyType: KeyTypeEnum.string,
     sortKeyName: 'day',
@@ -32,7 +34,7 @@ const tableConfigs = [{
 before('Create table', async () => {
     for(const tableConfig of tableConfigs) {
         await DynamoDB.createTable({
-            TableName: tableConfig.name,
+            TableName: tableConfig.tableAlias,
             AttributeDefinitions: [
                 {
                     AttributeName: tableConfig.partitionKeyName,

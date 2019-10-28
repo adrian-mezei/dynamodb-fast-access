@@ -7,7 +7,8 @@ DatabaseConfig.init({
     apiVersion: '2012-08-10',
     maxRetries: 9,
     tables: [{
-        name: 'Products',
+        tableAlias: 'Products',
+        tableName: 'Products',
         partitionKeyName: 'id',
         partitionKeyType: KeyTypeEnum.string,
         sortKeyName: 'timestamp',
