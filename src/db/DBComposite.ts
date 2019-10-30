@@ -2,14 +2,14 @@ import { DynamoDB } from 'aws-sdk';
 import { DB } from './DB';
 import { ListModel } from '../model/ListModel';
 import { DatabaseConfig } from '../util/DatabaseConfig';
-import { EntityExtender, DefaultEntityExtender } from './EntityExtender';
-import { DefaultEntityRelatedDeleter, EntityRelatedDeleter } from './EntityRelatedDeleter';
+import { Extender, DefaultExtender } from './Extender';
+import { DefaultRelatedDeleter, RelatedDeleter } from './RelatedDeleter';
 import { DynamoDBFastAccessError } from '../util/DynamoDBFastAccessError';
 
 export function DBComposite<EntityModel, EntityRawModel>(
     tableName: string, 
-    extend: EntityExtender<EntityModel, EntityRawModel> = DefaultEntityExtender, 
-    deleteRelated: EntityRelatedDeleter = DefaultEntityRelatedDeleter) {
+    extend: Extender<EntityModel, EntityRawModel> = DefaultExtender, 
+    deleteRelated: RelatedDeleter = DefaultRelatedDeleter) {
 
         return class DBComposite extends DB<EntityModel, EntityRawModel>(tableName, extend, deleteRelated) {
 
