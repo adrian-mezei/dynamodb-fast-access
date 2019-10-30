@@ -1,15 +1,15 @@
 import { DynamoDB } from 'aws-sdk';
 import { ExpressionCreator } from './ExpressionCreator';
 import { DatabaseConfig } from '../util/DatabaseConfig';
-import { EntityExtender, DefaultEntityExtender } from './EntityExtender';
-import { EntityRelatedDeleter, DefaultEntityRelatedDeleter } from './EntityRelatedDeleter';
+import { Extender, DefaultExtender } from './Extender';
+import { RelatedDeleter, DefaultRelatedDeleter } from './RelatedDeleter';
 import { DynamoDBKey, KeyTypeEnum } from '../model/ConfigModels';
 import { DynamoDBFastAccessError } from '../util/DynamoDBFastAccessError';
 
 export function DB<EntityModel, EntityRawModel>(
     tableName: string, 
-    extend: EntityExtender<EntityModel, EntityRawModel> = DefaultEntityExtender, 
-    deleteRelated: EntityRelatedDeleter = DefaultEntityRelatedDeleter) {
+    extend: Extender<EntityModel, EntityRawModel> = DefaultExtender, 
+    deleteRelated: RelatedDeleter = DefaultRelatedDeleter) {
 
         return class DB {
             public static getSortKeySeparator(): string {
@@ -30,6 +30,14 @@ export function DB<EntityModel, EntityRawModel>(
 
             public static getSortKeyName(): string | undefined {
                 return DatabaseConfig.DynamoDBConfig.tables.find(x => x.name === tableName)!.sortKeyName;
+            }
+
+            public static extend(rawEntities: EntityRawModel[]): Promise<EntityModel[]> {
+                return extend(rawEntities);
+            }
+
+            public static deleteRelated(ids: string[]): Promise<void> {
+                return deleteRelated(ids);
             }
 
             public static async getByIdRaw(id: string, attributes?: { ConsistentRead?: boolean }): Promise<EntityRawModel> {

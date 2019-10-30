@@ -2,14 +2,14 @@ import { DynamoDB } from 'aws-sdk';
 import { ExpressionCreator } from './ExpressionCreator';
 import { DB } from './DB';
 import { DatabaseConfig } from '../util/DatabaseConfig';
-import { EntityExtender, DefaultEntityExtender } from './EntityExtender';
-import { EntityRelatedDeleter, DefaultEntityRelatedDeleter } from './EntityRelatedDeleter';
+import { Extender, DefaultExtender } from './Extender';
+import { RelatedDeleter, DefaultRelatedDeleter } from './RelatedDeleter';
 import { DynamoDBFastAccessError } from '../util/DynamoDBFastAccessError';
 
 export function DBMutable<EntityModel, EntityRawModel, EntityUpdateModel>(
     tableName: string, 
-    extend: EntityExtender<EntityModel, EntityRawModel> = DefaultEntityExtender, 
-    deleteRelated: EntityRelatedDeleter = DefaultEntityRelatedDeleter) {
+    extend: Extender<EntityModel, EntityRawModel> = DefaultExtender, 
+    deleteRelated: RelatedDeleter = DefaultRelatedDeleter) {
        
         return class DBMutable extends DB<EntityModel, EntityRawModel>(tableName, extend, deleteRelated) {
             /**

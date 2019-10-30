@@ -1,12 +1,12 @@
 import { DBComposite } from './DBComposite';
 import { DBMutable } from './DBMutable';
-import { EntityExtender, DefaultEntityExtender } from './EntityExtender';
-import { DefaultEntityRelatedDeleter, EntityRelatedDeleter } from './EntityRelatedDeleter';
+import { Extender, DefaultExtender } from './Extender';
+import { DefaultRelatedDeleter, RelatedDeleter } from './RelatedDeleter';
 
 export function DBCompositeMutable<EntityModel, EntityRawModel, EntityUpdateModel>(
     tableName: string, 
-    extend: EntityExtender<EntityModel, EntityRawModel> = DefaultEntityExtender, 
-    deleteRelated: EntityRelatedDeleter = DefaultEntityRelatedDeleter) {
+    extend: Extender<EntityModel, EntityRawModel> = DefaultExtender, 
+    deleteRelated: RelatedDeleter = DefaultRelatedDeleter) {
     
         return class DBCompositeMutable extends DBComposite<EntityModel, EntityRawModel>(tableName, extend, deleteRelated) {
             // Mutable extension
