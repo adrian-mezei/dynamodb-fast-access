@@ -51,8 +51,8 @@ async function extender(rawItems: ProductRawModel[]): Promise<ProductModel[]> {
 }
 
 // Create a deleter function that is called before the item is deleted from the database
-async function deleter(ids: string[]): Promise<void[]> {
-    return Promise.all(ids.map( async () => {
+async function deleter(ids: string[]): Promise<void> {
+    await Promise.all(ids.map( async () => {
         // Delete some related item, or a document
     }));
 }

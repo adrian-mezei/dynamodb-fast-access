@@ -2,8 +2,8 @@ import { DB } from './db/DB';
 import { DBComposite } from './db/DBComposite';
 import { DBMutable } from './db/DBMutable';
 import { DBCompositeMutable } from './db/DBCompositeMutable';
-import { EntityExtender } from './db/EntityExtender';
-import { EntityRelatedDeleter } from './db/EntityRelatedDeleter';
+import { Extender } from './db/Extender';
+import { RelatedDeleter } from './db/RelatedDeleter';
 
 import { DatabaseConfig } from './util/DatabaseConfig';
 
@@ -12,8 +12,9 @@ export {
     DBComposite,
     DBMutable,
     DBCompositeMutable,
-    EntityExtender,
-    EntityRelatedDeleter,
+    
+    Extender,
+    RelatedDeleter,
 
     DatabaseConfig
 };

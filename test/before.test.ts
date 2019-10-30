@@ -34,7 +34,7 @@ const tableConfigs = [{
 before('Create table', async () => {
     for(const tableConfig of tableConfigs) {
         await DynamoDB.createTable({
-            TableName: tableConfig.tableAlias,
+            TableName: tableConfig.tableName,
             AttributeDefinitions: [
                 {
                     AttributeName: tableConfig.partitionKeyName,

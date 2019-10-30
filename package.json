@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "tsc && nyc --reporter=lcov --reporter=text mocha",
-    "startLocalDB": "java -Djava.library.path=./res/DynamoDBLocal/DynamoDBLocal_lib -jar res/DynamoDBLocal/DynamoDBLocal.jar -sharedDb -inMemory -port 3000 &",
+    "dynamodb": "java -Djava.library.path=./res/DynamoDBLocal/DynamoDBLocal_lib -jar res/DynamoDBLocal/DynamoDBLocal.jar -sharedDb -inMemory -port 3000 &",
     "build": "tsc",
     "lint": "tslint -p tsconfig.json",
     "prepare": "npm run build",
