@@ -1,6 +1,6 @@
 {
   "name": "dynamodb-fast-access",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Default CRUD operations for managing AWS DynamoDB table items in an easy-to-extend structure.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,7 +9,7 @@
     "dynamodb": "java -Djava.library.path=./res/DynamoDBLocal/DynamoDBLocal_lib -jar res/DynamoDBLocal/DynamoDBLocal.jar -sharedDb -inMemory -port 3000",
     "build": "tsc",
     "lint": "tslint -p tsconfig.json",
-    "np" : "np",
+    "np": "np",
     "npLocal": "c:/ProgramData/nvm/v8.12.0/npm run np --scripts-prepend-node-path true"
   },
   "repository": {
