@@ -36,20 +36,26 @@ export function DBMutable<EntityModel, EntityRawModel, EntityUpdateModel>(
 
                 const updateParams: DynamoDB.DocumentClient.UpdateItemInput = {
                     TableName: tableName,
-                    Key: { [partitionKeyName]: id },
+                    Key: {},
                     UpdateExpression: '',
-                    ExpressionAttributeNames: ExpressionCreator.getExpressionAttributeNames(Object.assign({}, updateAttributes, deleteAttributesObject)),
-                    ExpressionAttributeValues: ExpressionCreator.getExpressionAttributeValues(Object.assign({}, updateAttributes)),
                     ReturnValues: 'UPDATED_NEW'
                 };
 
-                if(sortKeyName !== undefined) {
+                const ExpressionAttributeNames = ExpressionCreator.getExpressionAttributeNames(Object.assign({}, updateAttributes, deleteAttributesObject));
+                const ExpressionAttributeValues = ExpressionCreator.getExpressionAttributeValues(Object.assign({}, updateAttributes));
+                
+                if(Object.keys(ExpressionAttributeNames).length > 0) updateParams.ExpressionAttributeNames = ExpressionAttributeNames;
+                if(Object.keys(ExpressionAttributeValues).length > 0) updateParams.ExpressionAttributeValues = ExpressionAttributeValues;
+
+                if(sortKeyName === undefined) {
+                    updateParams.Key[partitionKeyName] = id;
+                } else {
                     if(id.indexOf(sortKeySeparator) < 0) throw new DynamoDBFastAccessError('Composite key must include ' + sortKeySeparator + ' that separates the keys.');
                     updateParams.Key[partitionKeyName] = DBMutable._castKey(id).partitionKey;
                     updateParams.Key[sortKeyName] = DBMutable._castKey(id).sortKey;
                 }
 
-                if(updateAttributes && Object.keys(updateAttributes).length >= 0) {
+                if(updateAttributes && Object.keys(updateAttributes).length > 0) {
                     updateParams.UpdateExpression += 'SET ' + ExpressionCreator.getUpdateExpression(Object.assign({}, updateAttributes));
                 }
 

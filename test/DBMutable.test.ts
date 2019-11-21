@@ -59,3 +59,41 @@ describe('UpdateById function', () => {
         await ProductsDB.deleteById(item.id + ProductsDB.getSortKeySeparator() + item.timestamp);
     });
 });
+
+describe('updateByIdWithDelete function', () => { 
+    const item = { 
+        id: 'a13', 
+        timestamp: 1570354849343,
+        name: 'coat', 
+        price: 100, 
+        size: 37, 
+        color: 'blue', 
+        keyWords: ['coat'], 
+        availableFromTime: '2019-10-09'
+    };
+
+    before('create items', async () => {
+        await ProductsDB.create(item);
+    });
+
+    it('should update and delete at the same time', async () => {
+        await ProductsDB.updateByIdWithDelete(item.id + ProductsDB.getSortKeySeparator() + item.timestamp, {color: 'red'}, ['size']);
+
+        const result = await ProductsDB.getById(item.id + ProductsDB.getSortKeySeparator() + item.timestamp);
+
+        assert(result.color === 'red');
+        assert(result.size === undefined);
+    }); 
+
+    it('should delete if no update attribute is provided', async () => {
+        await ProductsDB.updateByIdWithDelete(item.id + ProductsDB.getSortKeySeparator() + item.timestamp, {}, ['color']);
+
+        const result = await ProductsDB.getById(item.id + ProductsDB.getSortKeySeparator() + item.timestamp);
+
+        assert(result.color === undefined);
+    }); 
+
+    after('delete created items', async () => {
+        await ProductsDB.deleteById(item.id + ProductsDB.getSortKeySeparator() + item.timestamp);
+    });
+});
