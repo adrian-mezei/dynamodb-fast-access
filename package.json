@@ -9,7 +9,8 @@
     "dynamodb": "java -Djava.library.path=./res/DynamoDBLocal/DynamoDBLocal_lib -jar res/DynamoDBLocal/DynamoDBLocal.jar -sharedDb -inMemory -port 3000",
     "build": "tsc",
     "lint": "tslint -p tsconfig.json",
-    "np": "np"
+    "np" : "np",
+    "npLocal": "c:/ProgramData/nvm/v8.12.0/npm run np --scripts-prepend-node-path true"
   },
   "repository": {
     "type": "git",
@@ -52,6 +53,7 @@
     "nyc": "^14.1.1",
     "source-map-support": "^0.5.13",
     "ts-node": "^8.4.1",
+    "tslint": "^5.20.1",
     "typescript": "^3.6.3"
   }
 }
