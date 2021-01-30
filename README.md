@@ -42,9 +42,9 @@ ProductsDB.deleteById('123456abc');
     - **Model**: that describes the object that is stored in the database extended by additional derived attributes.
     - **UpdateModel**: that describes the attributes of the object that is stored in the database that are mutable.
 
-1. (otional, recommended) Create the **extender** function that accepts **RawModel** type object array and returns **Model** type object array. This will extend your the raw database object upon request. (The default **extender** function does not modify the database objects.)
+1. (optional, recommended) Create the **extender** function that accepts **RawModel** type object array and returns **Model** type object array. This will extend your the raw database object upon request. (The default **extender** function does not modify the database objects.)
 
-1. (otional) Create the **deleter** function to perform some task before the object is being deleted. This function is invoked before an item is deleted. (The default **deleter** function does not do anything.)
+1. (optional) Create the **deleter** function to perform some task before the object is being deleted. This function is invoked before an item is deleted. (The default **deleter** function does not do anything.)
 
 1. Create the database class by extending one of the provided base classes that provide a lot of basic functions to access the database. You can write your own database functions here as well.
 
@@ -113,7 +113,7 @@ Example:
 | updateById | Updates the provided attributes of an entry of a DynamoDB table by id. |
 | updateByIdWithDelete | Updates and deletes the provided attributes of an entry of a DynamoDB table by id. |
 | query | Returns the extended entries from the DynamoDB table that has the provided partition key using [AWS DynamoDB query](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property). |
-| queryRaw | Returns the reaw entries from the  DynamoDB table that has the provided partition key using [AWS DynamoDB query](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property). |
+| queryRaw | Returns the raw entries from the  DynamoDB table that has the provided partition key using [AWS DynamoDB query](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property). |
 | queryRecurse | Performs a recursive query and returns the extended entries from the DynamoDB table that has the provided partition key using [AWS DynamoDB query](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property). |
 | queryRecurseRaw | Performs a recursive query and returns the raw entries from the DynamoDB table that has the provided partition key using [AWS DynamoDB query](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property). |
 | queryBeginsWith | Returns the extended entries from the DynamoDB table that has the provided partition key and whose sort key begins with the provided value using [AWS DynamoDB query](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property). |
