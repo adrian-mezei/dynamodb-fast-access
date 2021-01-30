@@ -50,6 +50,7 @@
     "chai": "^4.2.0",
     "commitizen": "^4.2.3",
     "coveralls": "^3.0.7",
+    "cspell": "^5.2.4",
     "cz-conventional-changelog": "^3.3.0",
     "husky": "^4.3.8",
     "istanbul": "^0.4.5",
@@ -62,13 +63,13 @@
     "typescript": "^3.6.3"
   },
   "config": {
-      "commitizen": {
-          "path": "./node_modules/cz-conventional-changelog"
-      }
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   },
   "husky": {
-      "hooks": {
-          "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-      }
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   }
 }

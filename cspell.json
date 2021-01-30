@@ -1,0 +1,28 @@
+{
+    "version": "0.1",
+    "language": "en",
+    // words - list of words to be always considered correct
+    "words": [
+        "Mezei",
+        "openjdk",
+        "Djava",
+        "lcov",
+        "commitlint",
+        "deleter",
+        "backoff"
+    ],
+    // flagWords - list of words to be always considered incorrect
+    // This is useful for offensive words and common spelling errors.
+    // For example "hte" should be "the"
+    "flagWords": ["hte"],
+    // Specify paths/files to ignore.
+    "ignorePaths": [
+        "cspell.json",
+        "node_modules", // this will ignore anything the node_modules directory
+        ".prettierrc",
+        "coverage",
+        "dist",
+        "package-lock.json",
+        ".git" // Ignore the .git directory
+    ]
+}
