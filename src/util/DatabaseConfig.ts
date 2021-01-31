@@ -1,5 +1,5 @@
 import { DynamoDBConfigModel } from './../model/ConfigModels';
-import AWS from 'aws-sdk';
+import * as AWS from 'aws-sdk';
 
 export class DatabaseConfig {
     public static DynamoDBConfig: DynamoDBConfigModel;
