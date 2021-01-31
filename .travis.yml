@@ -8,17 +8,9 @@ jdk:
 
 jobs:
   include:
-    - stage: test
-      install:
-        - npm install
-        - npm run dynamodb &
-      script:
-        - npm run test
-      after_script: "cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"
-
     - stage: release
       before_install:
-        - java -Djava.library.path=./res/DynamoDBLocal/DynamoDBLocal_lib -jar res/DynamoDBLocal/DynamoDBLocal.jar -sharedDb -inMemory -port 3000 &
+        - npm run dynamodb &
       deploy:
         provider: script
         skip_cleanup: true
