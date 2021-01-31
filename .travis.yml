@@ -1,17 +1,26 @@
 language: node_js
+
 node_js:
   - "10.23"
   
 jdk:
   - openjdk11
 
-before_install:
-  - npm install -g typescript
-  - java -Djava.library.path=./res/DynamoDBLocal/DynamoDBLocal_lib -jar res/DynamoDBLocal/DynamoDBLocal.jar -sharedDb -inMemory -port 3000 &
+jobs:
+  include:
+    - stage: test
+      before_install:
+        - java -Djava.library.path=./res/DynamoDBLocal/DynamoDBLocal_lib -jar res/DynamoDBLocal/DynamoDBLocal.jar -sharedDb -inMemory -port 3000 &
+      install:
+        - npm install
+        - npm run tsc
+      script:
+        - npm run test
+      after_script: "cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"
 
-install:
-  - npm install
-  - tsc
-  - npm test
-
-after_script: "cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"
+    - stage: release
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script:
+          npx semantic-release
