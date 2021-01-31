@@ -9,6 +9,8 @@ jdk:
 jobs:
   include:
     - stage: release
+      install:
+        - npm install
       after_install:
         - npm run dynamodb &
       deploy:
