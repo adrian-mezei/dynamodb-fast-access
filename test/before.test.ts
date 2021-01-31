@@ -1,7 +1,7 @@
 import * as AWS from 'aws-sdk';
 import { DatabaseConfig } from '../src/index';
 import 'mocha';
-import { KeyTypeEnum } from '../src/model/ConfigModels';
+import { DynamoDBTable } from '../src/model/ConfigModels';
 
 AWS.config.update({region: 'eu-west-1'});
 AWS.config.update({credentials: {accessKeyId: 'FakeAccessKey', secretAccessKey: 'FakeSecretAccessKey'}});
@@ -13,21 +13,21 @@ const dynamoConfig = {
 };
 const DynamoDB = new AWS.DynamoDB(dynamoConfig);
 const DynamoDBDocumentClient = new AWS.DynamoDB.DocumentClient(dynamoConfig);
-const tableConfigs = [{
+const tableConfigs: DynamoDBTable[] = [{
     tableAlias: 'ProductsTimestamp',
     tableName: 'ProductsTimestamp',
     partitionKeyName: 'id',
-    partitionKeyType: KeyTypeEnum.string,
+    partitionKeyType: 'string',
     sortKeyName: 'timestamp',
-    sortKeyType: KeyTypeEnum.number,
+    sortKeyType: 'number',
     sortKeySeparator: '$'
 },{
     tableAlias: 'ProductsDay',
     tableName: 'ProductsDay',
     partitionKeyName: 'id',
-    partitionKeyType: KeyTypeEnum.string,
+    partitionKeyType: 'string',
     sortKeyName: 'day',
-    sortKeyType: KeyTypeEnum.string,
+    sortKeyType: 'string',
     sortKeySeparator: '$'
 }];
 
@@ -38,11 +38,11 @@ before('Create table', async () => {
             AttributeDefinitions: [
                 {
                     AttributeName: tableConfig.partitionKeyName,
-                    AttributeType: tableConfig.partitionKeyType === KeyTypeEnum.number ? 'N' : 'S'
+                    AttributeType: tableConfig.partitionKeyType === 'number' ? 'N' : 'S'
                 },
                 { 
                     AttributeName: tableConfig.sortKeyName,
-                    AttributeType: tableConfig.sortKeyType === KeyTypeEnum.number ? 'N' : 'S'
+                    AttributeType: tableConfig.sortKeyType === 'number' ? 'N' : 'S'
                 }
             ],
             KeySchema: [

@@ -7,16 +7,11 @@ export interface DynamoDBTable {
     tableAlias: string;
     tableName: string;
     partitionKeyName: string;
-    partitionKeyType: KeyTypeEnum;
+    partitionKeyType: KeyType;
     sortKeyName?: string;
-    sortKeyType?: KeyTypeEnum;
+    sortKeyType?: KeyType;
     sortKeySeparator?: string;
     indices?: DynamoDBIndex[];
-}
-
-export enum KeyTypeEnum {
-    string = 'string',
-    number = 'number'
 }
 
 export interface DynamoDBKey {
@@ -27,8 +22,10 @@ export interface DynamoDBKey {
 interface DynamoDBIndex {
     name: string;
     partitionKeyName: string;
-    partitionKeyType: KeyTypeEnum;
+    partitionKeyType: KeyType;
     sortKeyName?: string;
-    sortKeyType?: KeyTypeEnum;
+    sortKeyType?: KeyType;
     sortKeySeparator?: string;
 }
+
+export type KeyType = 'string' | 'number';

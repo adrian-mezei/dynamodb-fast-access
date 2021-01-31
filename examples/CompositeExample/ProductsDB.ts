@@ -1,6 +1,5 @@
 import { DBCompositeMutable } from '../../src/db/DBCompositeMutable';
 import { DatabaseConfig } from '../../src/util/DatabaseConfig';
-import { KeyTypeEnum } from '../../src/model/ConfigModels';
 
 // Initiate by passing the config (you can also load this from a config file)
 DatabaseConfig.init({
@@ -9,9 +8,9 @@ DatabaseConfig.init({
         tableAlias: 'Products',
         tableName: 'Products',
         partitionKeyName: 'id',
-        partitionKeyType: KeyTypeEnum.string,
+        partitionKeyType: 'string',
         sortKeyName: 'timestamp',
-        sortKeyType: KeyTypeEnum.number,
+        sortKeyType: 'number',
         sortKeySeparator: '$'
     }]
 });

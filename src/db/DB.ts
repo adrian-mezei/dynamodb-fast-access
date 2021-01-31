@@ -3,7 +3,7 @@ import { ExpressionCreator } from './ExpressionCreator';
 import { DatabaseConfig } from '../util/DatabaseConfig';
 import { Extender, DefaultExtender } from './Extender';
 import { RelatedDeleter, DefaultRelatedDeleter } from './RelatedDeleter';
-import { DynamoDBKey, KeyTypeEnum, DynamoDBTable } from '../model/ConfigModels';
+import { DynamoDBKey, DynamoDBTable, KeyType } from '../model/ConfigModels';
 import { DynamoDBFastAccessError } from '../util/DynamoDBFastAccessError';
 
 export function DB<EntityModel, EntityRawModel>(
@@ -39,7 +39,7 @@ export function DB<EntityModel, EntityRawModel>(
                 return DB.getTableConfig().partitionKeyName;
             }
 
-            public static getPartitionKeyType(): string {
+            public static getPartitionKeyType(): KeyType {
                 return DB.getTableConfig().partitionKeyType;
             }
 
@@ -47,7 +47,7 @@ export function DB<EntityModel, EntityRawModel>(
                 return DB.getTableConfig().sortKeyName;
             }
 
-            public static getSortKeyType(): string | undefined {
+            public static getSortKeyType(): KeyType | undefined {
                 return DB.getTableConfig().sortKeyType;
             }
 
@@ -374,16 +374,16 @@ export function DB<EntityModel, EntityRawModel>(
 
                 let partitionKeyTyped: string | number;
                 switch(DB.getPartitionKeyType()) {
-                    case KeyTypeEnum.string: partitionKeyTyped = partitionKey; break;
-                    case KeyTypeEnum.number: partitionKeyTyped = +partitionKey; break;
+                    case 'string': partitionKeyTyped = partitionKey; break;
+                    case 'number': partitionKeyTyped = +partitionKey; break;
                 }
 
                 if(!DB.getSortKeyName()) return { partitionKey: partitionKeyTyped! };
 
                 let sortKeyTyped: string | number;
                 switch(DB.getSortKeyType()) {
-                    case KeyTypeEnum.string: sortKeyTyped = sortKey; break;
-                    case KeyTypeEnum.number: sortKeyTyped = +sortKey; break;
+                    case 'string': sortKeyTyped = sortKey; break;
+                    case 'number': sortKeyTyped = +sortKey; break;
                 }
 
                 return {

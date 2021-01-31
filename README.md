@@ -18,7 +18,7 @@ DDFA.DatabaseConfig.init({
         tableAlias: 'Products',
         tableName: 'Products_test',
         partitionKeyName: 'id',
-        partitionKeyType: KeyTypeEnum.string,
+        partitionKeyType: 'string'
     }]
 });
 
