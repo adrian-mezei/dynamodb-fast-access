@@ -9,12 +9,10 @@ jdk:
 jobs:
   include:
     - stage: release
-      install:
-        - npm install
-      after_install:
-        - npm run dynamodb &
       deploy:
         provider: script
         skip_cleanup: true
+        before_script:
+        - npm run dynamodb &
         script:
           npx semantic-release
