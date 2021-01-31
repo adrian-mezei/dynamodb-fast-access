@@ -26,6 +26,7 @@ jobs:
       script: npm run test
 
     - stage: release
+      before_install: npm run dynamodb &
       deploy:
         provider: script
         skip_cleanup: true
