@@ -9,7 +9,7 @@ jdk:
 jobs:
   include:
     - stage: release
-      before_install:
+      before_test:
         - java -Djava.library.path=./res/DynamoDBLocal/DynamoDBLocal_lib -jar res/DynamoDBLocal/DynamoDBLocal.jar -sharedDb -inMemory -port 3000 &
       deploy:
         provider: script
