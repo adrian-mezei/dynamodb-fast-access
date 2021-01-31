@@ -62,7 +62,7 @@ before('Create table', async () => {
                 ReadCapacityUnits: 5,
                 WriteCapacityUnits: 5,
             },
-        }).promise();
+        } as AWS.DynamoDB.CreateTableInput).promise();
     }
 });
 
