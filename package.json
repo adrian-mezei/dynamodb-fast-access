@@ -5,9 +5,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "rm -rf dist && npm run lint && npm run build && nyc --reporter=lcov --reporter=text mocha",
+    "test": "rm -rf dist && npm run lint && npm run build && npm run build:examples && nyc --reporter=lcov --reporter=text mocha",
     "dynamodb": "java -Djava.library.path=./res/DynamoDBLocal/DynamoDBLocal_lib -jar res/DynamoDBLocal/DynamoDBLocal.jar -sharedDb -inMemory -port 3000",
     "build": "tsc",
+    "build:examples": "cd examples && echo {} > tsconfig.json && tsc --noEmit",
     "watch": "tsc --watch",
     "lint": "tslint -p tsconfig.json",
     "commit": "git-cz"
