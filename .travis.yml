@@ -8,6 +8,13 @@ jdk:
 
 jobs:
   include:
+    - stage: test
+      script: npm run format:check
+    -
+      script: npm run lint
+    - 
+      script: npm run cspell
+
     - stage: release
       before_install:
         - npm run dynamodb &
