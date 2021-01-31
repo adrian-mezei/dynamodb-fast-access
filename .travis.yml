@@ -9,8 +9,8 @@ jdk:
 jobs:
   include:
     - stage: release
-      before_test:
-        - java -Djava.library.path=./res/DynamoDBLocal/DynamoDBLocal_lib -jar res/DynamoDBLocal/DynamoDBLocal.jar -sharedDb -inMemory -port 3000 &
+      after_install:
+        - npm run dynamodb &
       deploy:
         provider: script
         skip_cleanup: true
