@@ -7,12 +7,13 @@ export class DatabaseConfig {
     private static DynamoDBDocumentClientInstance: AWS.DynamoDB.DocumentClient;
     
     public static DynamoDBDocumentClient(): AWS.DynamoDB.DocumentClient {
-        if(!this.DynamoDBDocumentClientInstance) 
+        if(!this.DynamoDBDocumentClientInstance) {
             this.DynamoDBDocumentClientInstance = new AWS.DynamoDB.DocumentClient(
                 { 
                     apiVersion: '2012-08-10'
                 }
             );
+        }
         return this.DynamoDBDocumentClientInstance;
     }
     

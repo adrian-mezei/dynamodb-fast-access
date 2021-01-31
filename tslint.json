@@ -4,7 +4,7 @@
         "quotemark": [true, "single"],
         "trailing-comma": false,
         "max-line-length": false,
-        "curly": [false, "same-line-single-line"],
+        "curly": [true, "ignore-same-line"],
         "no-console": false,
         "object-literal-sort-keys": false,
         "object-literal-shorthand": false,
