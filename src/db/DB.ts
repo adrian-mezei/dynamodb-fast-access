@@ -131,12 +131,12 @@ export function DB<EntityModel, EntityRawModel>(
                     return DatabaseConfig.DynamoDBDocumentClient().batchGet(params).promise();
                 }));
 
-                let rawEtities: EntityRawModel[] = [];
+                let rawEntities: EntityRawModel[] = [];
                 for(const data of dataArray) {
-                    rawEtities = rawEtities.concat(data.Responses![tableName] as EntityRawModel[]);
+                    rawEntities = rawEntities.concat(data.Responses![tableName] as EntityRawModel[]);
                 }
                 
-                return rawEtities;
+                return rawEntities;
             }
         
             public static async getByIds(ids: string[]): Promise<EntityModel[]> {
