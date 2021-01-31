@@ -5,8 +5,9 @@
         ["@semantic-release/changelog", {
             "changelogFile": "CHANGELOG.md"
         }],
-        ["@semantic-release/git", {
+        ["@semantic-release/github", {
             "assets": ["CHANGELOG.md"]
-        }]
+        }],
+        "@semantic-release/npm"
     ]
 }
