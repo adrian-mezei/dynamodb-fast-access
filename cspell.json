@@ -22,7 +22,10 @@
         ".prettierrc",
         "coverage",
         "dist",
+        "res",
+        ".nyc_output",
         "package-lock.json",
-        ".git" // Ignore the .git directory
+        ".git", // Ignore the .git directory
+        "tslint.json"
     ]
 }

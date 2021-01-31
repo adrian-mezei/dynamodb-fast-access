@@ -16,11 +16,11 @@ interface ProductModel extends ProductRawModel {
     discountPercent: number;
 }
 
-const discountpercent = 10;
+const discountPercent = 10;
 
 function extender(x: ProductRawModel[]): Promise<ProductModel[]> {
     const response: ProductModel[] = [];
-    for(const rawProduct of x) response.push({...rawProduct, discountPercent: discountpercent});
+    for(const rawProduct of x) response.push({...rawProduct, discountPercent: discountPercent});
     return new Promise( res => res(response));
 }
 
@@ -56,7 +56,7 @@ describe('Default extend function', () => {
     });
 });
 
-describe('Overriden extend function', () => { 
+describe('Overridden extend function', () => { 
     const item = { 
         id: 'a12', 
         timestamp: 1570354849343,
@@ -71,6 +71,6 @@ describe('Overriden extend function', () => {
     it('must override the default extend function functionality', async () => {
         const extendedItem = (await ProductsDB2.extend([item]))[0];
         
-        assert(extendedItem.discountPercent === discountpercent);
+        assert(extendedItem.discountPercent === discountPercent);
     });
 });
