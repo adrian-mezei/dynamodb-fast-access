@@ -5,7 +5,6 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "tsc": "tsc",
     "test": "rm -rf dist && npm run lint && npm run build && nyc --reporter=lcov --reporter=text mocha",
     "dynamodb": "java -Djava.library.path=./res/DynamoDBLocal/DynamoDBLocal_lib -jar res/DynamoDBLocal/DynamoDBLocal.jar -sharedDb -inMemory -port 3000",
     "build": "tsc",
