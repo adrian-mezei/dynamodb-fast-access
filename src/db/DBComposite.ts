@@ -125,8 +125,9 @@ export function DBComposite<EntityModel, EntityRawModel>(
             const partitionKeyName = DBComposite.getPartitionKeyName();
             const sortKeyName = DBComposite.getSortKeyName();
 
-            if (sortKeyName === undefined)
+            if (sortKeyName === undefined) {
                 throw new DynamoDBFastAccessError('Sort key name is undefined for table ' + tableName + '.');
+            }
 
             const queryParams: DynamoDB.DocumentClient.QueryInput = {
                 TableName: tableName,
@@ -162,8 +163,9 @@ export function DBComposite<EntityModel, EntityRawModel>(
             const tableName = DBComposite.getTableName();
             const partitionKeyName = DBComposite.getPartitionKeyName();
             const sortKeyName = DBComposite.getSortKeyName();
-            if (sortKeyName === undefined)
+            if (sortKeyName === undefined) {
                 throw new DynamoDBFastAccessError('Sort key name is undefined for table ' + tableName + '.');
+            }
 
             const queryParams: DynamoDB.DocumentClient.QueryInput = {
                 TableName: tableName,

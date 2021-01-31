@@ -309,10 +309,12 @@ export function DB<EntityModel, EntityRawModel>(
                 TableName: tableName,
             };
             if (FilterExpression !== '') params.FilterExpression = FilterExpression;
-            if (Object.keys(ExpressionAttributeNames).length > 0)
+            if (Object.keys(ExpressionAttributeNames).length > 0) {
                 params.ExpressionAttributeNames = ExpressionAttributeNames;
-            if (Object.keys(ExpressionAttributeValues).length > 0)
+            }
+            if (Object.keys(ExpressionAttributeValues).length > 0) {
                 params.ExpressionAttributeValues = ExpressionAttributeValues;
+            }
 
             return params;
         }

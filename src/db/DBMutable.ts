@@ -29,8 +29,9 @@ export function DBMutable<EntityModel, EntityRawModel, EntityUpdateModel>(
             if (
                 (!updateAttributes || Object.keys(updateAttributes).length === 0) &&
                 (!deleteAttributes || deleteAttributes.length === 0)
-            )
+            ) {
                 return {} as EntityUpdateModel;
+            }
 
             const tableName = DBMutable.getTableName();
             const partitionKeyName = DBMutable.getPartitionKeyName();
@@ -56,18 +57,20 @@ export function DBMutable<EntityModel, EntityRawModel, EntityUpdateModel>(
                 Object.assign({}, updateAttributes),
             );
 
-            if (Object.keys(ExpressionAttributeNames).length > 0)
+            if (Object.keys(ExpressionAttributeNames).length > 0) {
                 updateParams.ExpressionAttributeNames = ExpressionAttributeNames;
-            if (Object.keys(ExpressionAttributeValues).length > 0)
+            }
+            if (Object.keys(ExpressionAttributeValues).length > 0) {
                 updateParams.ExpressionAttributeValues = ExpressionAttributeValues;
-
+            }
             if (sortKeyName === undefined) {
                 updateParams.Key[partitionKeyName] = id;
             } else {
-                if (id.indexOf(sortKeySeparator) < 0)
+                if (id.indexOf(sortKeySeparator) < 0) {
                     throw new DynamoDBFastAccessError(
                         'Composite key must include ' + sortKeySeparator + ' that separates the keys.',
                     );
+                }
                 updateParams.Key[partitionKeyName] = DBMutable._castKey(id).partitionKey;
                 updateParams.Key[sortKeyName] = DBMutable._castKey(id).sortKey;
             }

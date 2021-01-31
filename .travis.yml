@@ -9,10 +9,13 @@ jdk:
 jobs:
   include:
     - stage: test
+      name: test
       script: npm run format:check
     -
+      name: lint
       script: npm run lint
     - 
+      name: spelling
       script: npm run cspell
 
     - stage: release
