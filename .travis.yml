@@ -9,7 +9,7 @@ jdk:
 jobs:
   include:
     - stage: test
-      name: test
+      name: format
       script: npm run format:check
     -
       name: lint
@@ -17,10 +17,15 @@ jobs:
     - 
       name: spelling
       script: npm run cspell
+    - 
+      name: examples
+      script: npm run test:examples
+    -
+      name: test
+      before_script: npm run dynamodb &
+      script: npm run test
 
     - stage: release
-      before_install:
-        - npm run dynamodb &
       deploy:
         provider: script
         skip_cleanup: true
