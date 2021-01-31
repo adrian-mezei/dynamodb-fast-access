@@ -7,14 +7,4 @@ import { RelatedDeleter } from './db/RelatedDeleter';
 
 import { DatabaseConfig } from './util/DatabaseConfig';
 
-export { 
-    DB,
-    DBComposite,
-    DBMutable,
-    DBCompositeMutable,
-    
-    Extender,
-    RelatedDeleter,
-
-    DatabaseConfig
-};
+export { DB, DBComposite, DBMutable, DBCompositeMutable, Extender, RelatedDeleter, DatabaseConfig };

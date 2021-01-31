@@ -4,12 +4,14 @@ import { DBMutable } from '../../src/db/DBMutable';
 // Initiate by passing the config (you can also load this from a config file)
 DatabaseConfig.init({
     maxRetries: 9,
-    tables: [{
-        tableAlias: 'Products',
-        tableName: 'Products',
-        partitionKeyName: 'id',
-        partitionKeyType: 'string',
-    }]
+    tables: [
+        {
+            tableAlias: 'Products',
+            tableName: 'Products',
+            partitionKeyName: 'id',
+            partitionKeyType: 'string',
+        },
+    ],
 });
 
 // You can also provide models, an extender function and a deleter function (these are described in the composite example)
@@ -27,21 +29,21 @@ export class ProductsDB extends DBMutable<any, any, any>('Products') {
 //                                             //
 /////////////////////////////////////////////////
 
-const item = { 
-    id: 'a12', 
-    name: 'coat', 
-    price: 100, 
+const item = {
+    id: 'a12',
+    name: 'coat',
+    price: 100,
     size: '37',
-    color: 'blue', 
-    keyWords: ['coat'], 
-    availableFromTime: '2019-09-09'
+    color: 'blue',
+    keyWords: ['coat'],
+    availableFromTime: '2019-09-09',
 };
 
 // Create
 ProductsDB.create(item);
 ProductsDB.createRaw(item);
-ProductsDB.createBatch([item, {...item, id: 'ab12'}]);
-ProductsDB.createBatchRaw([item, {...item, id: 'ab12'}]);
+ProductsDB.createBatch([item, { ...item, id: 'ab12' }]);
+ProductsDB.createBatchRaw([item, { ...item, id: 'ab12' }]);
 
 // Get
 ProductsDB.getById('a12');
@@ -50,24 +52,24 @@ ProductsDB.getByIds(['a12', 'ab12']);
 ProductsDB.getByIdsRaw(['a12', 'ab12']);
 
 // Scan
-ProductsDB.scanFiltered({ color: 'red'});
-ProductsDB.scanFiltered(undefined, { arrayName: 'keyWords', value: 'coat'});
-ProductsDB.scanFiltered({ color: 'red'}, { arrayName: 'keyWords', value: 'coat'});
-ProductsDB.scanFilteredRaw({ color: 'red'});
-ProductsDB.scanFilteredRaw(undefined, { arrayName: 'keyWords', value: 'coat'});
-ProductsDB.scanFilteredRaw({ color: 'red'}, { arrayName: 'keyWords', value: 'coat'});
+ProductsDB.scanFiltered({ color: 'red' });
+ProductsDB.scanFiltered(undefined, { arrayName: 'keyWords', value: 'coat' });
+ProductsDB.scanFiltered({ color: 'red' }, { arrayName: 'keyWords', value: 'coat' });
+ProductsDB.scanFilteredRaw({ color: 'red' });
+ProductsDB.scanFilteredRaw(undefined, { arrayName: 'keyWords', value: 'coat' });
+ProductsDB.scanFilteredRaw({ color: 'red' }, { arrayName: 'keyWords', value: 'coat' });
 
 // Update
 ProductsDB.updateById('a12', { color: 'green', price: 110 });
 ProductsDB.updateByIdWithDelete('a12', undefined, ['size']);
-ProductsDB.updateByIdWithDelete('a12', { color: 'green'}, ['size']);
+ProductsDB.updateByIdWithDelete('a12', { color: 'green' }, ['size']);
 
 // Delete
 ProductsDB.deleteById('a12');
 ProductsDB.deleteByIds(['a12', 'ab12']);
-ProductsDB.deleteScanFiltered({ color: 'red'});
-ProductsDB.deleteScanFiltered(undefined, { arrayName: 'keyWords', value: 'coat'});
-ProductsDB.deleteScanFiltered({ color: 'red'}, { arrayName: 'keyWords', value: 'coat'});
+ProductsDB.deleteScanFiltered({ color: 'red' });
+ProductsDB.deleteScanFiltered(undefined, { arrayName: 'keyWords', value: 'coat' });
+ProductsDB.deleteScanFiltered({ color: 'red' }, { arrayName: 'keyWords', value: 'coat' });
 
 // Other
 ProductsDB.getTableName();

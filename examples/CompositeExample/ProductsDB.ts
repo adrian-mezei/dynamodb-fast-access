@@ -4,15 +4,17 @@ import { DatabaseConfig } from '../../src/util/DatabaseConfig';
 // Initiate by passing the config (you can also load this from a config file)
 DatabaseConfig.init({
     maxRetries: 9,
-    tables: [{
-        tableAlias: 'Products',
-        tableName: 'Products',
-        partitionKeyName: 'id',
-        partitionKeyType: 'string',
-        sortKeyName: 'timestamp',
-        sortKeyType: 'number',
-        sortKeySeparator: '$'
-    }]
+    tables: [
+        {
+            tableAlias: 'Products',
+            tableName: 'Products',
+            partitionKeyName: 'id',
+            partitionKeyType: 'string',
+            sortKeyName: 'timestamp',
+            sortKeyType: 'number',
+            sortKeySeparator: '$',
+        },
+    ],
 });
 
 // Define model with the attributes that will be stored in the database
@@ -38,11 +40,12 @@ type ProductUpdateModel = Partial<Omit<Omit<ProductRawModel, 'id'>, 'timestamp'>
 // Create the extender function that calculates the derived attribute values
 async function extender(rawItems: ProductRawModel[]): Promise<ProductModel[]> {
     const extendedItems: ProductModel[] = [];
-    for(const item of rawItems) {
-        const daysAvailable = (new Date().valueOf() - new Date(item.availableFromTime).valueOf())/(1000*60*60*24);
+    for (const item of rawItems) {
+        const daysAvailable =
+            (new Date().valueOf() - new Date(item.availableFromTime).valueOf()) / (1000 * 60 * 60 * 24);
         extendedItems.push({
             ...item,
-            discountPercent: daysAvailable > 365 ? 20 : 0 // 20% discount if older than a year
+            discountPercent: daysAvailable > 365 ? 20 : 0, // 20% discount if older than a year
         });
     }
     return extendedItems;
@@ -50,25 +53,26 @@ async function extender(rawItems: ProductRawModel[]): Promise<ProductModel[]> {
 
 // Create a deleter function that is called before the item is deleted from the database
 async function deleter(ids: string[]): Promise<void> {
-    await Promise.all(ids.map( async () => {
-        // Delete some related item, or a document
-    }));
+    await Promise.all(
+        ids.map(async () => {
+            // Delete some related item, or a document
+        }),
+    );
 }
 
 // Create your database class
 export class ProductsDB extends DBCompositeMutable<ProductModel, ProductRawModel, ProductUpdateModel>(
     'Products',
     extender,
-    deleter
+    deleter,
 ) {
-
     // Define your own DB queries like this
     public createTwice(item: ProductModel, id1: string, id2: string) {
         const partitionKeyName = ProductsDB.getPartitionKeyName();
 
         const item1 = { ...item, [partitionKeyName]: id1 };
         const item2 = { ...item, [partitionKeyName]: id2 };
-        
+
         return ProductsDB.createBatch([item1, item2]);
     }
 }
@@ -83,25 +87,28 @@ export class ProductsDB extends DBCompositeMutable<ProductModel, ProductRawModel
 /////////////////////////////////////////////////
 
 // Everything included in the simple example works here as well.
-const items = [{ 
-    id: 'a12', 
-    timestamp: 1570354849343,
-    name: 'coat', 
-    price: 100, 
-    size: 37, 
-    color: 'blue', 
-    keyWords: ['coat'], 
-    availableFromTime: '2019-09-09'
-},{ 
-    id: 'a12', 
-    timestamp: 1570354883182,
-    name: 'coat', 
-    price: 100, 
-    size: 37, 
-    color: 'blue', 
-    keyWords: ['coat'], 
-    availableFromTime: '2019-09-09'
-}];
+const items = [
+    {
+        id: 'a12',
+        timestamp: 1570354849343,
+        name: 'coat',
+        price: 100,
+        size: 37,
+        color: 'blue',
+        keyWords: ['coat'],
+        availableFromTime: '2019-09-09',
+    },
+    {
+        id: 'a12',
+        timestamp: 1570354883182,
+        name: 'coat',
+        price: 100,
+        size: 37,
+        color: 'blue',
+        keyWords: ['coat'],
+        availableFromTime: '2019-09-09',
+    },
+];
 
 ProductsDB.createBatch(items);
 
@@ -127,4 +134,8 @@ ProductsDB.queryBeginsWithRaw('a12', '15703548', ProductsDB.combineKeys({ id: 'a
 ProductsDB.queryBeginsWithRecurse('a12', '15703548');
 ProductsDB.queryBeginsWithRecurse('a12', '15703548', ProductsDB.combineKeys({ id: 'a12', timestamp: '1570354849343' }));
 ProductsDB.queryBeginsWithRecurseRaw('a12', '15703548');
-ProductsDB.queryBeginsWithRecurseRaw('a12', '15703548', ProductsDB.combineKeys({ id: 'a12', timestamp: '1570354849343' }));
+ProductsDB.queryBeginsWithRecurseRaw(
+    'a12',
+    '15703548',
+    ProductsDB.combineKeys({ id: 'a12', timestamp: '1570354849343' }),
+);

@@ -3,8 +3,8 @@ import 'mocha';
 import { assert } from 'chai';
 import { DBComposite } from '../src/db/DBComposite';
 
-AWS.config.update({region: 'eu-west-1'});
-AWS.config.update({credentials: {accessKeyId: 'FakeAccessKey', secretAccessKey: 'FakeSecretAccessKey'}});
+AWS.config.update({ region: 'eu-west-1' });
+AWS.config.update({ credentials: { accessKeyId: 'FakeAccessKey', secretAccessKey: 'FakeSecretAccessKey' } });
 
 interface ProductRawModel {
     id: string;
@@ -21,52 +21,57 @@ interface ProductModel extends ProductRawModel {
 }
 class ProductsDB extends DBComposite<ProductModel, ProductRawModel>('ProductsDay') {}
 
-// ######## ########  ######  ########  ######  
-//    ##    ##       ##    ##    ##    ##    ## 
-//    ##    ##       ##          ##    ##       
-//    ##    ######    ######     ##     ######  
-//    ##    ##             ##    ##          ## 
-//    ##    ##       ##    ##    ##    ##    ## 
-//    ##    ########  ######     ##     ######                                                           
+// ######## ########  ######  ########  ######
+//    ##    ##       ##    ##    ##    ##    ##
+//    ##    ##       ##          ##    ##
+//    ##    ######    ######     ##     ######
+//    ##    ##             ##    ##          ##
+//    ##    ##       ##    ##    ##    ##    ##
+//    ##    ########  ######     ##     ######
 
-describe('QueryBeginsWithRecurse function', () => { 
-    const items = [{ 
-        id: 'a12', 
-        day: '2019-09-09',
-        name: 'coat', 
-        price: 100, 
-        size: 37, 
-        color: 'blue', 
-        keyWords: ['coat'], 
-        availableFromTime: '2019-09-09'
-    },{ 
-        id: 'a12', 
-        day: '2019-09-10',
-        name: 'coat', 
-        price: 100, 
-        size: 37, 
-        color: 'blue', 
-        keyWords: ['coat'], 
-        availableFromTime: '2019-09-09'
-    },{ 
-        id: 'a13', 
-        day: '2019-09-10',
-        name: 'coat', 
-        price: 100, 
-        size: 37, 
-        color: 'blue', 
-        keyWords: ['coat'], 
-        availableFromTime: '2019-10-09'
-    },{ 
-        id: 'a13', 
-        day: '2019-10-10',
-        name: 'coat', 
-        price: 100, 
-        size: 37, 
-        color: 'blue', 
-        keyWords: ['coat'], 
-        availableFromTime: '2019-10-09'
-    }];
+describe('QueryBeginsWithRecurse function', () => {
+    const items = [
+        {
+            id: 'a12',
+            day: '2019-09-09',
+            name: 'coat',
+            price: 100,
+            size: 37,
+            color: 'blue',
+            keyWords: ['coat'],
+            availableFromTime: '2019-09-09',
+        },
+        {
+            id: 'a12',
+            day: '2019-09-10',
+            name: 'coat',
+            price: 100,
+            size: 37,
+            color: 'blue',
+            keyWords: ['coat'],
+            availableFromTime: '2019-09-09',
+        },
+        {
+            id: 'a13',
+            day: '2019-09-10',
+            name: 'coat',
+            price: 100,
+            size: 37,
+            color: 'blue',
+            keyWords: ['coat'],
+            availableFromTime: '2019-10-09',
+        },
+        {
+            id: 'a13',
+            day: '2019-10-10',
+            name: 'coat',
+            price: 100,
+            size: 37,
+            color: 'blue',
+            keyWords: ['coat'],
+            availableFromTime: '2019-10-09',
+        },
+    ];
 
     before('create items', async () => {
         await ProductsDB.createBatch(items);
@@ -82,7 +87,7 @@ describe('QueryBeginsWithRecurse function', () => {
         assert(results.map(x => x.day).includes(items[0].day));
         assert(results.map(x => x.day).includes(items[1].day));
         assert(!results.map(x => x.day).includes(items[3].day));
-    }); 
+    });
 
     after('delete created items', async () => {
         await ProductsDB.deleteByIds(items.map(x => x.id + ProductsDB.getSortKeySeparator() + x.day));

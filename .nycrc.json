@@ -1,7 +1,4 @@
 {
     "extends": "@istanbuljs/nyc-config-typescript",
-    "exclude": [
-        "test/**/*",
-        "src/db/DBCompositeMutable.ts"
-    ]
+    "exclude": ["test/**/*", "src/db/DBCompositeMutable.ts"]
 }

@@ -12,14 +12,23 @@ export interface IDB<EntityModel, EntityRawModel> {
     createBatch(entities: EntityRawModel[]): Promise<EntityModel[]>;
     // Get
     getByIdRaw(id: string, attributes?: { ConsistentRead?: boolean }): Promise<EntityRawModel>;
-    getById(id: string, attributes?: { ConsistentRead?: boolean}): Promise<EntityModel>;
+    getById(id: string, attributes?: { ConsistentRead?: boolean }): Promise<EntityModel>;
     getByIdsRaw(ids: string[]): Promise<EntityRawModel[]>;
     getByIds(ids: string[]): Promise<EntityModel[]>;
     // Scan
-    scanFilteredRaw(filterAttributes?: Partial<EntityRawModel>, arrayContainsAttribute?: { arrayName: string, value: string }): Promise<EntityRawModel[]>;
-    scanFiltered(filterAttributes?: | object, arrayContainsAttribute?: { arrayName: string, value: string }): Promise<EntityModel[]>;
+    scanFilteredRaw(
+        filterAttributes?: Partial<EntityRawModel>,
+        arrayContainsAttribute?: { arrayName: string; value: string },
+    ): Promise<EntityRawModel[]>;
+    scanFiltered(
+        filterAttributes?: object,
+        arrayContainsAttribute?: { arrayName: string; value: string },
+    ): Promise<EntityModel[]>;
     // Delete
     deleteById(id: string): Promise<string>;
     deleteByIds(ids?: string[]): Promise<string[]>;
-    deleteScanFiltered(filterAttributes?: Partial<EntityRawModel>, arrayContains?: { arrayName: string, value: string } ): Promise<{}>;
+    deleteScanFiltered(
+        filterAttributes?: Partial<EntityRawModel>,
+        arrayContains?: { arrayName: string; value: string },
+    ): Promise<{}>;
 }

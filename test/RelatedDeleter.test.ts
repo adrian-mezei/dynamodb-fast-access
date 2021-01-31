@@ -18,28 +18,28 @@ interface ProductModel extends ProductRawModel {
 
 class ProductsDB extends DB<ProductModel, ProductRawModel>('ProductsTimestamp') {}
 
-// ######## ########  ######  ########  ######  
-//    ##    ##       ##    ##    ##    ##    ## 
-//    ##    ##       ##          ##    ##       
-//    ##    ######    ######     ##     ######  
-//    ##    ##             ##    ##          ## 
-//    ##    ##       ##    ##    ##    ##    ## 
-//    ##    ########  ######     ##     ######  
+// ######## ########  ######  ########  ######
+//    ##    ##       ##    ##    ##    ##    ##
+//    ##    ##       ##          ##    ##
+//    ##    ######    ######     ##     ######
+//    ##    ##             ##    ##          ##
+//    ##    ##       ##    ##    ##    ##    ##
+//    ##    ########  ######     ##     ######
 
-describe('Default related deleter function', () => { 
-    const item = { 
-        id: 'a12', 
+describe('Default related deleter function', () => {
+    const item = {
+        id: 'a12',
         timestamp: 1570354849343,
-        name: 'coat', 
-        price: 100, 
-        size: 37, 
-        color: 'blue', 
-        keyWords: ['coat'], 
-        availableFromTime: '2019-09-09'
+        name: 'coat',
+        price: 100,
+        size: 37,
+        color: 'blue',
+        keyWords: ['coat'],
+        availableFromTime: '2019-09-09',
     };
 
     it('must return nothing', async () => {
-        const returned = (await ProductsDB.deleteRelated([item.id]));
+        const returned = await ProductsDB.deleteRelated([item.id]);
 
         assert(returned === undefined);
     });

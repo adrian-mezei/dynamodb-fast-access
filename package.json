@@ -1,79 +1,82 @@
 {
-  "name": "dynamodb-fast-access",
-  "version": "2.1.1",
-  "description": "Default CRUD operations for managing AWS DynamoDB table items in an easy-to-extend structure.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "test": "rm -rf dist && npm run lint && npm run build && npm run build:examples && nyc --reporter=lcov --reporter=text mocha",
-    "cspell": "cspell \"**/*\"",
-    "dynamodb": "java -Djava.library.path=./res/DynamoDBLocal/DynamoDBLocal_lib -jar res/DynamoDBLocal/DynamoDBLocal.jar -sharedDb -inMemory -port 3000",
-    "build": "tsc",
-    "build:examples": "cd examples && echo {} > tsconfig.json && tsc --noEmit",
-    "watch": "tsc --watch",
-    "lint": "tslint -p tsconfig.json",
-    "commit": "git-cz"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/adrian-mezei/dynamodb-fast-access.git"
-  },
-  "keywords": [
-    "DynamoDB",
-    "CRUD",
-    "fast",
-    "access",
-    "AWS",
-    "database",
-    "NoSQL",
-    "Node.js",
-    "Amazon"
-  ],
-  "author": "Adrián Mezei",
-  "license": "MIT",
-  "files": [
-    "dist/**/*"
-  ],
-  "bugs": {
-    "url": "https://github.com/adrian-mezei/dynamodb-fast-access/issues"
-  },
-  "homepage": "https://github.com/adrian-mezei/dynamodb-fast-access#readme",
-  "dependencies": {
-    "aws-sdk": "^2.539.0"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^11.0.0",
-    "@commitlint/config-conventional": "^11.0.0",
-    "@istanbuljs/nyc-config-typescript": "^1.0.1",
-    "@semantic-release/changelog": "^5.0.1",
-    "@semantic-release/commit-analyzer": "^8.0.1",
-    "@semantic-release/git": "^9.0.0",
-    "@semantic-release/release-notes-generator": "^9.0.1",
-    "@types/chai": "^4.2.3",
-    "@types/mocha": "^5.2.7",
-    "@types/node": "^12.7.5",
-    "chai": "^4.2.0",
-    "commitizen": "^4.2.3",
-    "coveralls": "^3.0.7",
-    "cspell": "^5.2.4",
-    "cz-conventional-changelog": "^3.3.0",
-    "husky": "^4.3.8",
-    "mocha": "^8.2.1",
-    "nyc": "^15.1.0",
-    "semantic-release": "^17.3.7",
-    "source-map-support": "^0.5.13",
-    "ts-node": "^8.4.1",
-    "tslint": "^5.20.1",
-    "typescript": "^3.6.3"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+    "name": "dynamodb-fast-access",
+    "version": "2.1.1",
+    "description": "Default CRUD operations for managing AWS DynamoDB table items in an easy-to-extend structure.",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "test": "rm -rf dist && npm run lint && npm run build && npm run build:examples && nyc --reporter=lcov --reporter=text mocha",
+        "dynamodb": "java -Djava.library.path=./res/DynamoDBLocal/DynamoDBLocal_lib -jar res/DynamoDBLocal/DynamoDBLocal.jar -sharedDb -inMemory -port 3000",
+        "build": "tsc",
+        "build:examples": "cd examples && echo {} > tsconfig.json && tsc --noEmit",
+        "watch": "tsc --watch",
+        "lint": "tslint -p tsconfig.json",
+        "cspell": "cspell \"**/*\"",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "commit": "git-cz"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/adrian-mezei/dynamodb-fast-access.git"
+    },
+    "keywords": [
+        "DynamoDB",
+        "CRUD",
+        "fast",
+        "access",
+        "AWS",
+        "database",
+        "NoSQL",
+        "Node.js",
+        "Amazon"
+    ],
+    "author": "Adrián Mezei",
+    "license": "MIT",
+    "files": [
+        "dist/**/*"
+    ],
+    "bugs": {
+        "url": "https://github.com/adrian-mezei/dynamodb-fast-access/issues"
+    },
+    "homepage": "https://github.com/adrian-mezei/dynamodb-fast-access#readme",
+    "dependencies": {
+        "aws-sdk": "^2.539.0"
+    },
+    "devDependencies": {
+        "@commitlint/cli": "^11.0.0",
+        "@commitlint/config-conventional": "^11.0.0",
+        "@istanbuljs/nyc-config-typescript": "^1.0.1",
+        "@semantic-release/changelog": "^5.0.1",
+        "@semantic-release/commit-analyzer": "^8.0.1",
+        "@semantic-release/git": "^9.0.0",
+        "@semantic-release/release-notes-generator": "^9.0.1",
+        "@types/chai": "^4.2.3",
+        "@types/mocha": "^5.2.7",
+        "@types/node": "^12.7.5",
+        "chai": "^4.2.0",
+        "commitizen": "^4.2.3",
+        "coveralls": "^3.0.7",
+        "cspell": "^5.2.4",
+        "cz-conventional-changelog": "^3.3.0",
+        "husky": "^4.3.8",
+        "mocha": "^8.2.1",
+        "nyc": "^15.1.0",
+        "prettier": "^2.2.1",
+        "semantic-release": "^17.3.7",
+        "source-map-support": "^0.5.13",
+        "ts-node": "^8.4.1",
+        "tslint": "^5.20.1",
+        "typescript": "^3.6.3"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
+    },
+    "husky": {
+        "hooks": {
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+        }
     }
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  }
 }

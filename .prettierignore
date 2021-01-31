@@ -1,0 +1,8 @@
+package-lock.json
+node_modules
+.nyc_output
+coverage
+dist
+res
+CHANGELOG.md
+.travis.yml
