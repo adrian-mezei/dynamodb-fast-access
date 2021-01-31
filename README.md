@@ -13,7 +13,6 @@ Default CRUD operations for managing AWS DynamoDB table items in an easy-to-exte
 import * as DDFA from 'dynamodb-fast-access';
 
 DDFA.DatabaseConfig.init({
-    apiVersion: '2012-08-10',
     maxRetries: 9,
     tables: [{
         tableAlias: 'Products',
@@ -74,7 +73,6 @@ ProductsDB.deleteById('123456abc');
 Example:
 ```javascript
 {
-    apiVersion: '2012-08-10',
     maxRetries: 9,
     tables: [{
         tableAlias: 'Products',

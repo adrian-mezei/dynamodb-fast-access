@@ -4,7 +4,6 @@ import { KeyTypeEnum } from '../../src/model/ConfigModels';
 
 // Initiate by passing the config (you can also load this from a config file)
 DatabaseConfig.init({
-    apiVersion: '2012-08-10',
     maxRetries: 9,
     tables: [{
         tableAlias: 'Products',
