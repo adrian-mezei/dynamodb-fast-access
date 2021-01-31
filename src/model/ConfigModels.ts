@@ -1,5 +1,4 @@
 export interface DynamoDBConfigModel {
-    apiVersion?: string;
     maxRetries: number;
     tables: DynamoDBTable[];
 }

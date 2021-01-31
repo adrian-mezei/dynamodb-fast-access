@@ -10,7 +10,7 @@ export class DatabaseConfig {
         if(!this.DynamoDBDocumentClientInstance) 
             this.DynamoDBDocumentClientInstance = new AWS.DynamoDB.DocumentClient(
                 { 
-                    apiVersion: this.DynamoDBConfig.apiVersion
+                    apiVersion: '2012-08-10'
                 }
             );
         return this.DynamoDBDocumentClientInstance;

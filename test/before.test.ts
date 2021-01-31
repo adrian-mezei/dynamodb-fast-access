@@ -65,7 +65,6 @@ before('Create table', async () => {
 
 before('Init dynamodb-fast-access object', () => {
     DatabaseConfig.init({
-        apiVersion: '2012-08-10',
         maxRetries: 9,
         tables: tableConfigs
     }, DynamoDBDocumentClient);
