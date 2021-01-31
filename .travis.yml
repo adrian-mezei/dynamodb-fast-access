@@ -12,7 +12,6 @@ jobs:
       deploy:
         provider: script
         skip_cleanup: true
-        before_script:
-        - npm run dynamodb &
         script:
-          npx semantic-release
+          - npm run dynamodb &
+          - npx semantic-release
