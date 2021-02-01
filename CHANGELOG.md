@@ -1,3 +1,10 @@
+## [4.0.2](https://github.com/adrian-mezei/dynamodb-fast-access/compare/v4.0.1...v4.0.2) (2021-02-01)
+
+
+### Bug Fixes
+
+* readme updated with missing apiVersion removal ([737920e](https://github.com/adrian-mezei/dynamodb-fast-access/commit/737920e9db3a007f8dc7b3c047979714b4eae7cd))
+
 ## [4.0.1](https://github.com/adrian-mezei/dynamodb-fast-access/compare/v4.0.0...v4.0.1) (2021-02-01)
 
 
