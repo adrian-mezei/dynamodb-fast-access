@@ -1,21 +1,22 @@
-## [4.0.2](https://github.com/adrian-mezei/dynamodb-fast-access/compare/v4.0.1...v4.0.2) (2021-02-01)
+# [4.0.0](https://github.com/adrian-mezei/dynamodb-fast-access/compare/v3.0.4...v4.0.0) (2021-01-31)
+
+
+### Features
+
+* define partition key type and sort key type with a string instead of an enum ([adf9f9f](https://github.com/adrian-mezei/dynamodb-fast-access/commit/adf9f9f5d0ee8331ffef54f62e8de7471c772e8a))
+
+### BREAKING CHANGES
+
+* Define partition key type and sort key type with a string instead of an enum. This makes it easier to load configuration from a simple json object like a json file.
+
+
+# [3.0.0](https://github.com/adrian-mezei/dynamodb-fast-access/compare/v2.1.1...v3.0.0) (2021-01-31)
 
 
 ### Bug Fixes
 
-* readme updated with missing apiVersion removal ([737920e](https://github.com/adrian-mezei/dynamodb-fast-access/commit/737920e9db3a007f8dc7b3c047979714b4eae7cd))
+* remove the possibility to manually provide a dynamodb api version ([0a8113f](https://github.com/adrian-mezei/dynamodb-fast-access/commit/0a8113fd864f8a46076f5a916842edac044d4116))
 
-## [4.0.1](https://github.com/adrian-mezei/dynamodb-fast-access/compare/v4.0.0...v4.0.1) (2021-02-01)
+### BREAKING CHANGES
 
-
-### Bug Fixes
-
-* release configuration updated ([09d23de](https://github.com/adrian-mezei/dynamodb-fast-access/commit/09d23de2214036f16eafeeff7cd309aab5a72e5e))
-
-## [3.0.2](https://github.com/adrian-mezei/dynamodb-fast-access/compare/v3.0.1...v3.0.2) (2021-01-31)
-
-
-### Bug Fixes
-
-* changelog generation updated ([6db1987](https://github.com/adrian-mezei/dynamodb-fast-access/commit/6db1987ad282e76b95ec588dfcb4702270a767fb))
-* changelog generation updated ([92e6a68](https://github.com/adrian-mezei/dynamodb-fast-access/commit/92e6a6869dfd9e563168df6dfb1725c4b51f5310))
+* It is not allowed to provide a DynamoDB api version manually.
