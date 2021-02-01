@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/adrian-mezei/dynamodb-fast-access/compare/v4.0.0...v4.0.1) (2021-02-01)
+
+
+### Bug Fixes
+
+* release configuration updated ([09d23de](https://github.com/adrian-mezei/dynamodb-fast-access/commit/09d23de2214036f16eafeeff7cd309aab5a72e5e))
+
 ## [3.0.2](https://github.com/adrian-mezei/dynamodb-fast-access/compare/v3.0.1...v3.0.2) (2021-01-31)
 
 
